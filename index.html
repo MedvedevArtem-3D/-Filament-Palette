@@ -3,42 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Палитра материалов | Medvedev Artem 3D Studio</title>
+  <title>Палитра материалов | Medvedev Artem</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { 
       font-family: system-ui, -apple-system, sans-serif; 
-      background: #111111; /* Темный фон */
+      background: #111111; 
       color: #e0e0e0; 
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
     
-    /* Шапка */
-    header { text-align: center; padding-top: 24px; }
-    .studio-name { 
-      font-family: "Times New Roman", serif; /* Шрифт с засечками как на макете */
-      font-size: 18px; 
-      letter-spacing: 2px; 
-      text-transform: uppercase;
-      color: #cccccc;
-    }
-    .logo-section {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 15px 0 30px;
-    }
-    .line {
-      flex-grow: 1;
-      height: 1px;
-      background: #333;
-      border: none;
+    /* Шапка с единым изображением */
+    header { 
+      text-align: center; 
+      padding: 24px 16px; 
     }
     .logo {
-      height: 45px; /* Размер логотипа, можно менять */
-      margin: 0 20px;
+      width: 1000px; /* Ограничитель ширины для больших мониторов */
+      max-width: 100%; /* Защита от появления горизонтальной прокрутки на смартфонах */
+      height: auto;
+      display: block;
+      margin: 0 auto;
     }
 
     /* Фильтры */
@@ -63,14 +50,6 @@
     .filter-btn:hover { border-color: #888; color: #fff; }
     .filter-btn.active { background: #555; color: #fff; border-color: #555; }
 
-    /* Заголовок страницы */
-    h1 { 
-      text-align: center; 
-      font-weight: 400; 
-      font-size: 28px; 
-      margin-bottom: 30px; 
-    }
-
     /* Сетка карточек */
     .grid-container {
       flex-grow: 1;
@@ -94,29 +73,11 @@
       display: flex;
       flex-direction: column;
     }
-    .color-swatch { 
-      height: 140px; 
-      width: 100%; 
-    }
-    .info { 
-      padding: 15px; 
-      font-size: 14px; 
-    }
-    .type { 
-      font-weight: 700; 
-      color: #ffffff; 
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-    .color-name { 
-      color: #ffffff; 
-      font-size: 16px;
-      margin-bottom: 2px;
-    }
-    .brand { 
-      color: #888888; 
-      font-size: 12px; 
-    }
+    .color-swatch { height: 140px; width: 100%; }
+    .info { padding: 15px; font-size: 14px; }
+    .type { font-weight: 700; color: #ffffff; font-size: 12px; margin-bottom: 4px; }
+    .color-name { color: #ffffff; font-size: 16px; margin-bottom: 2px; }
+    .brand { color: #888888; font-size: 12px; }
 
     /* Подвал */
     footer {
@@ -133,20 +94,14 @@
       .grid-container { padding: 0 16px 30px; }
       .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
       .color-swatch { height: 100px; }
-      .logo { height: 35px; margin: 0 10px; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="studio-name">MEDVEDEV ARTEM 3D STUDIO</div>
-    <div class="logo-section">
-      <hr class="line">
-      <!-- Сюда подгрузится ваш logo.png -->
-      <img src="logo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
-      <hr class="line">
-    </div>
+    <!-- Изображение, включающее текст, логотип и линии -->
+    <img src="logo.png" alt="Medvedev Artem 3D Studio" class="logo" onerror="this.style.display='none'">
   </header>
 
   <div class="filters" id="filters">
@@ -157,18 +112,15 @@
     <button class="filter-btn" data-filter="ABS">ABS</button>
   </div>
 
-  <h1>Палитра материалов</h1>
-
   <div class="grid-container">
     <div class="grid" id="catalog"></div>
   </div>
 
   <footer>
-    © 2024 Medvedev Artem 3D Studio
+    © 2026 Medvedev Artem 3D Studio
   </footer>
 
   <script>
-    // База данных ваших пластиков (заполнил теми, что на картинке)
     const filaments = [
       { brand: "FDplast", type: "PLA", name: "Черный", hex: "#1a1a1a" },
       { brand: "Bestfilament", type: "PETG", name: "Оранжевый", hex: "#ff6600" },
@@ -183,16 +135,13 @@
     const container = document.getElementById('catalog');
     const filterBtns = document.querySelectorAll('.filter-btn');
 
-    // Функция отрисовки карточек
     function renderCards(filterType) {
       container.innerHTML = ''; 
       
-      // Фильтруем массив по типу (или показываем все)
       const filtered = filterType === 'all' 
         ? filaments 
         : filaments.filter(f => f.type === filterType);
 
-      // Рисуем карточки
       filtered.forEach(f => {
         container.innerHTML += `
           <div class="card">
@@ -206,19 +155,14 @@
       });
     }
 
-    // Добавляем логику кликов по кнопкам фильтров
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        // Убираем активный статус у всех
         filterBtns.forEach(b => b.classList.remove('active'));
-        // Делаем активной нажатую кнопку
         btn.classList.add('active');
-        // Обновляем витрину
         renderCards(btn.getAttribute('data-filter'));
       });
     });
 
-    // Запускаем отрисовку всех катушек при загрузке страницы
     renderCards('all');
   </script>
 </body>
