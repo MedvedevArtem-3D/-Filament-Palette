@@ -3,44 +3,223 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Палитра филамента</title>
+  <title>Палитра материалов | Medvedev Artem 3D Studio</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: #121212; color: #e0e0e0; padding: 16px; }
-    h1 { font-size: 20px; margin-bottom: 16px; text-align: center; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
-    .card { background: #1e1e1e; border-radius: 8px; overflow: hidden; border: 1px solid #2e2e2e; }
-    .color-swatch { height: 90px; width: 100%; }
-    .info { padding: 10px; font-size: 13px; }
-    .type { font-weight: 700; color: #ffffff; }
-    .color-name { color: #cccccc; margin: 2px 0; }
-    .brand { color: #888888; font-size: 11px; }
+    body { 
+      font-family: system-ui, -apple-system, sans-serif; 
+      background: #111111; /* Темный фон */
+      color: #e0e0e0; 
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Шапка */
+    header { text-align: center; padding-top: 24px; }
+    .studio-name { 
+      font-family: "Times New Roman", serif; /* Шрифт с засечками как на макете */
+      font-size: 18px; 
+      letter-spacing: 2px; 
+      text-transform: uppercase;
+      color: #cccccc;
+    }
+    .logo-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 15px 0 30px;
+    }
+    .line {
+      flex-grow: 1;
+      height: 1px;
+      background: #333;
+      border: none;
+    }
+    .logo {
+      height: 45px; /* Размер логотипа, можно менять */
+      margin: 0 20px;
+    }
+
+    /* Фильтры */
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+      padding: 0 16px;
+    }
+    .filter-btn {
+      background: transparent;
+      color: #ccc;
+      border: 1px solid #444;
+      padding: 6px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: #888; color: #fff; }
+    .filter-btn.active { background: #555; color: #fff; border-color: #555; }
+
+    /* Заголовок страницы */
+    h1 { 
+      text-align: center; 
+      font-weight: 400; 
+      font-size: 28px; 
+      margin-bottom: 30px; 
+    }
+
+    /* Сетка карточек */
+    .grid-container {
+      flex-grow: 1;
+      padding: 0 40px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+      gap: 20px; 
+    }
+
+    /* Внешний вид карточки */
+    .card { 
+      background: #181818; 
+      border-radius: 12px; 
+      overflow: hidden; 
+      border: 1px solid #333;
+      display: flex;
+      flex-direction: column;
+    }
+    .color-swatch { 
+      height: 140px; 
+      width: 100%; 
+    }
+    .info { 
+      padding: 15px; 
+      font-size: 14px; 
+    }
+    .type { 
+      font-weight: 700; 
+      color: #ffffff; 
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+    .color-name { 
+      color: #ffffff; 
+      font-size: 16px;
+      margin-bottom: 2px;
+    }
+    .brand { 
+      color: #888888; 
+      font-size: 12px; 
+    }
+
+    /* Подвал */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: #666;
+      border-top: 1px solid #333;
+      margin-top: auto;
+    }
+
+    /* Адаптация под телефоны */
+    @media (max-width: 600px) {
+      .grid-container { padding: 0 16px 30px; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+      .color-swatch { height: 100px; }
+      .logo { height: 35px; margin: 0 10px; }
+    }
   </style>
 </head>
 <body>
-  <h1>Каталог филамента</h1>
-  <div class="grid" id="catalog"></div>
+
+  <header>
+    <div class="studio-name">MEDVEDEV ARTEM 3D STUDIO</div>
+    <div class="logo-section">
+      <hr class="line">
+      <!-- Сюда подгрузится ваш logo.png -->
+      <img src="logo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
+      <hr class="line">
+    </div>
+  </header>
+
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="PLA">PLA</button>
+    <button class="filter-btn" data-filter="PETG">PETG</button>
+    <button class="filter-btn" data-filter="TPU">TPU</button>
+    <button class="filter-btn" data-filter="ABS">ABS</button>
+  </div>
+
+  <h1>Палитра материалов</h1>
+
+  <div class="grid-container">
+    <div class="grid" id="catalog"></div>
+  </div>
+
+  <footer>
+    © 2024 Medvedev Artem 3D Studio
+  </footer>
 
   <script>
+    // База данных ваших пластиков (заполнил теми, что на картинке)
     const filaments = [
-      { brand: "FDplast", type: "PLA", name: "Черный", hex: "#111111" },
+      { brand: "FDplast", type: "PLA", name: "Черный", hex: "#1a1a1a" },
       { brand: "Bestfilament", type: "PETG", name: "Оранжевый", hex: "#ff6600" },
       { brand: "eSUN", type: "TPU", name: "Натуральный", hex: "#e8e4c9" },
-      { brand: "FDplast", type: "PETG", name: "Белый", hex: "#ffffff" }
+      { brand: "FDplast", type: "PETG", name: "Белый", hex: "#ffffff" },
+      { brand: "Rec", type: "ABS", name: "Графитовый", hex: "#63676c" },
+      { brand: "Filamentum", type: "PETG", name: "Синий", hex: "#1d387b" },
+      { brand: "Raise3D", type: "PLA", name: "Зеленый", hex: "#2b5c37" },
+      { brand: "eSUN", type: "TPU", name: "Серый", hex: "#aaaaaa" }
     ];
 
     const container = document.getElementById('catalog');
-    filaments.forEach(f => {
-      container.innerHTML += `
-        <div class="card">
-          <div class="color-swatch" style="background-color: ${f.hex}"></div>
-          <div class="info">
-            <div class="type">${f.type}</div>
-            <div class="color-name">${f.name}</div>
-            <div class="brand">${f.brand}</div>
-          </div>
-        </div>`;
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    // Функция отрисовки карточек
+    function renderCards(filterType) {
+      container.innerHTML = ''; 
+      
+      // Фильтруем массив по типу (или показываем все)
+      const filtered = filterType === 'all' 
+        ? filaments 
+        : filaments.filter(f => f.type === filterType);
+
+      // Рисуем карточки
+      filtered.forEach(f => {
+        container.innerHTML += `
+          <div class="card">
+            <div class="color-swatch" style="background-color: ${f.hex}"></div>
+            <div class="info">
+              <div class="type">${f.type}</div>
+              <div class="color-name">${f.name}</div>
+              <div class="brand">${f.brand}</div>
+            </div>
+          </div>`;
+      });
+    }
+
+    // Добавляем логику кликов по кнопкам фильтров
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Убираем активный статус у всех
+        filterBtns.forEach(b => b.classList.remove('active'));
+        // Делаем активной нажатую кнопку
+        btn.classList.add('active');
+        // Обновляем витрину
+        renderCards(btn.getAttribute('data-filter'));
+      });
     });
+
+    // Запускаем отрисовку всех катушек при загрузке страницы
+    renderCards('all');
   </script>
 </body>
 </html>
