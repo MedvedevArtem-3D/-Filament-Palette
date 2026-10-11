@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Палитра филамента</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #121212; color: #e0e0e0; padding: 16px; }
+    h1 { font-size: 20px; margin-bottom: 16px; text-align: center; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+    .card { background: #1e1e1e; border-radius: 8px; overflow: hidden; border: 1px solid #2e2e2e; }
+    .color-swatch { height: 90px; width: 100%; }
+    .info { padding: 10px; font-size: 13px; }
+    .type { font-weight: 700; color: #ffffff; }
+    .color-name { color: #cccccc; margin: 2px 0; }
+    .brand { color: #888888; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <h1>Каталог филамента</h1>
+  <div class="grid" id="catalog"></div>
+
+  <script>
+    const filaments = [
+      { brand: "FDplast", type: "PLA", name: "Черный", hex: "#111111" },
+      { brand: "Bestfilament", type: "PETG", name: "Оранжевый", hex: "#ff6600" },
+      { brand: "eSUN", type: "TPU", name: "Натуральный", hex: "#e8e4c9" },
+      { brand: "FDplast", type: "PETG", name: "Белый", hex: "#ffffff" }
+    ];
+
+    const container = document.getElementById('catalog');
+    filaments.forEach(f => {
+      container.innerHTML += `
+        <div class="card">
+          <div class="color-swatch" style="background-color: ${f.hex}"></div>
+          <div class="info">
+            <div class="type">${f.type}</div>
+            <div class="color-name">${f.name}</div>
+            <div class="brand">${f.brand}</div>
+          </div>
+        </div>`;
+    });
+  </script>
+</body>
+</html>
