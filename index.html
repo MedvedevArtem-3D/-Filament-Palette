@@ -10,7 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Forum&family=Inter:wght@400;500&family=Montserrat:wght@300;600;700&display=swap" rel="stylesheet">
   
   <style>
-    /* ГЛАВНЫЕ ЦВЕТА БРЕНДА */
     :root {
       --brand-color: #1a5d3c; 
       --brand-glow: rgba(26, 93, 60, 0.4); 
@@ -20,11 +19,9 @@
       box-sizing: border-box; 
       margin: 0; 
       padding: 0; 
-      /* Полностью отключаем синее мерцание при тапе на телефонах */
       -webkit-tap-highlight-color: transparent; 
     }
     
-    /* Убираем стандартную обводку при клике */
     button:focus, a:focus { outline: none; }
     
     body { 
@@ -38,7 +35,7 @@
     
     .content-wrapper { padding: 40px 40px 60px; flex-grow: 1; width: 100%; max-width: 1600px; margin: 0 auto; }
     
-    .header-section { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 40px; }
+    .header-section { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 20px; }
     .logo { width: 140px; height: 140px; object-fit: contain; margin-bottom: 24px; cursor: pointer; transition: transform 0.2s; }
     .logo:active { transform: scale(0.95); }
     
@@ -49,7 +46,7 @@
       background: transparent; border: none; text-align: center; margin-top: 10px;
     }
 
-    .filters { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 50px; margin-top: 30px; }
+    .filters { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; margin-top: 30px; }
     
     .filter-btn {
       display: inline-flex; align-items: center; background: transparent;
@@ -64,6 +61,17 @@
     .count { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; background: rgba(255, 255, 255, 0.15); padding: 3px 8px; border-radius: 12px; margin-left: 10px; }
     .filter-btn.active .count { background: rgba(255, 255, 255, 0.3); }
 
+    .filter-description {
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #aaaaaa;
+      max-width: 700px;
+      margin: 0 auto 40px auto;
+      min-height: 48px;
+      transition: opacity 0.3s ease;
+    }
+
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
     
     .card { 
@@ -75,24 +83,12 @@
       flex-direction: column;
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
     }
-    
-    .card:active {
-      transform: scale(0.98);
-      border-color: var(--brand-color);
-    }
+    .card:active { transform: scale(0.98); border-color: var(--brand-color); }
 
     @media (hover: hover) {
-      .card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.5), 0 0 20px var(--brand-glow);
-        border-color: var(--brand-color);
-      }
+      .card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.5), 0 0 20px var(--brand-glow); border-color: var(--brand-color); }
       .filter-btn:hover:not(.active) { border-color: #888; color: #fff; }
-      
-      .fab-vk:hover {
-        transform: translateY(-4px) scale(1.02);
-        box-shadow: 0 12px 25px var(--brand-glow);
-      }
+      .fab-vk:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 25px var(--brand-glow); }
     }
     
     .color-swatch, .carousel { height: 240px; width: 100%; position: relative; background: #222; }
@@ -105,7 +101,6 @@
     }
     .carousel-img.active { opacity: 1; z-index: 1; }
     
-    /* Плашка материала теперь в фирменном акцентном цвете */
     .type-badge {
       font-family: 'Montserrat', sans-serif; position: absolute; top: 14px; right: 14px;
       background: var(--brand-color); color: #ffffff; padding: 4px 10px;
@@ -121,7 +116,6 @@
     }
     @media (hover: hover) { .carousel:hover .nav-btn { opacity: 1; } }
     .nav-btn:active { transform: translateY(-50%) scale(0.9); }
-    
     .nav-btn.left { left: 12px; }
     .nav-btn.right { right: 12px; }
     
@@ -132,9 +126,19 @@
     .info { padding: 20px; pointer-events: none; }
     .color-name { color: #ffffff; font-size: 18px; font-weight: 500; margin: 0; }
 
+    .empty-grid-msg {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+      font-size: 15px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+      border: 1px dashed #333;
+    }
+
     footer { text-align: center; padding: 24px; font-size: 13px; color: #666; border-top: 1px solid #333; margin-top: auto; }
 
-    /* Лайтбокс */
     .lightbox {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.95); z-index: 9999; display: flex; align-items: center; justify-content: center;
@@ -154,7 +158,6 @@
     .lightbox-next { right: 30px; }
     .lightbox-title { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: white; font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 600; text-align: center; }
 
-    /* Тост уведомление */
     .toast {
       position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: #2a2a2a; color: #fff;
       padding: 16px 24px; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 14px; text-align: center;
@@ -162,11 +165,9 @@
     }
     .toast.show { bottom: 40px; }
 
-    /* ПЛАВАЮЩАЯ КНОПКА СВЯЗИ (CTA) без иконки */
     .fab-vk {
       position: fixed; bottom: 30px; right: 30px; background: var(--brand-color); color: #ffffff;
-      padding: 14px 28px; /* Немного увеличил отступы по бокам, чтобы текстовая кнопка смотрелась гармонично */
-      border-radius: 30px; text-decoration: none; font-family: 'Montserrat', sans-serif;
+      padding: 14px 28px; border-radius: 30px; text-decoration: none; font-family: 'Montserrat', sans-serif;
       font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center;
       box-shadow: 0 8px 20px var(--brand-glow); transition: all 0.2s; z-index: 1000;
     }
@@ -174,11 +175,12 @@
 
     @media (max-width: 768px) {
       .content-wrapper { padding: 16px 16px 80px; }
-      .header-section { margin-bottom: 24px; }
+      .header-section { margin-bottom: 16px; }
       .logo { width: 100px; height: 100px; margin-bottom: 16px; }
       .main-title { font-size: 34px; margin-bottom: 16px; letter-spacing: 1px; }
       .disclaimer { font-size: 12px; padding: 0 10px; }
-      .filters { gap: 10px; margin-bottom: 30px; }
+      .filters { gap: 10px; margin-bottom: 20px; }
+      .filter-description { font-size: 13px; padding: 0 16px; margin-bottom: 30px; }
       .filter-btn { font-size: 13px; padding: 8px 16px; }
       .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
       .color-swatch, .carousel { height: 160px; }
@@ -193,7 +195,6 @@
       .lightbox-title { bottom: 20px; font-size: 16px; width: 100%; padding: 0 16px; }
       .toast { width: 90%; font-size: 13px; padding: 14px 20px; bottom: -120px; }
       .toast.show { bottom: 90px; }
-      
       .fab-vk { bottom: 20px; right: 20px; padding: 12px 24px; font-size: 14px; }
     }
   </style>
@@ -205,7 +206,7 @@
       <img src="logo.png" alt="Medvedev Artem 3D Studio" class="logo" id="main-logo" onerror="this.style.display='none'">
       <h1 class="main-title">ПАЛИТРА ФИЛАМЕНТА</h1>
       <div class="disclaimer">
-        На фото я старался показать цвет готовго изделия так, как он выглядят в реальности — с честной цветопередачей и правильным освещением. Но каждый экран отображает цвета по-своему, поэтому возможны небольшие отличия между фото и реальным изделием. Если у вас есть вопросы по оттенкам — напишите мне, я помогу!
+        На фото я старался показать цвет готового изделия так, как он выглядят в реальности — с честной цветопередачей и правильным освещением. Но каждый экран отображает цвета по-своему, поэтому возможны небольшие отличия между фото и реальным изделием. Если у вас есть вопросы по оттенкам — напишите мне, я помогу!
       </div>
     </header>
     
@@ -217,6 +218,10 @@
       <button class="filter-btn" data-filter="ABS">ABS</button>
       <button class="filter-btn" data-filter="PETG-CF">PETG-CF</button>
     </div>
+    
+    <div id="filter-description" class="filter-description">
+      Показана вся палитра. Выберите конкретный материал, чтобы узнать о его свойствах и применении.
+    </div>
 
     <div class="grid" id="catalog"></div>
   </div>
@@ -225,10 +230,7 @@
     © 2026 Medvedev Artem 3D Studio
   </footer>
 
-  <!-- Обновленная кнопка связи (без SVG иконки) -->
-  <a href="https://vk.com/id184420359" target="_blank" class="fab-vk">
-    Заказать печать
-  </a>
+  <a href="https://vk.com/id184420359" target="_blank" class="fab-vk">Заказать печать</a>
 
   <div id="lightbox" class="lightbox">
     <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
@@ -241,6 +243,7 @@
   <div id="toast" class="toast">Не все сразу 😉<br>Главная страница ещё не вернулась из отпуска!</div>
 
   <script>
+    // Массив материалов с вашими русскими названиями файлов изображений
     const filamentsData = [
       { type: "PLA", name: "Синий темный", images: ["Синий_темный_1.jpg", "Синий_темный_2.jpg"], hex: "#061D62" },  
       { type: "PETG", name: "Синий", images: ["Синий_1.jpg", "Синий_2.jpg"], hex: "#144FC7" }, 
@@ -259,9 +262,19 @@
       { type: "PLA", name: "Слоновая кость", images: ["Слоновая_кость_1.jpg", "Слоновая_кость_2.jpg"], hex: "#EBE7DB" },
     ];
 
+    const filterDescriptions = {
+      "all": "Показана вся палитра. Выберите конкретный материал, чтобы узнать о его свойствах и применении.",
+      "PLA": "Самый простой материал. Хорош для декоративных изделий, прототипов и деталей без высоких температурных нагрузок.",
+      "PETG": "Прочный и гибкий пластик. Идеален для функциональных деталей, которые должны выдерживать нагрузку и удары. Подходит для улицы и помещений.",
+      "PETG-CF": "PETG с добавлением углеволокна. Повышенная жесткость и прочность при меньшем весе. Отлично подходит для технических деталей с высокой нагрузкой.",
+      "TPU": "Гибкий резиноподобный пластик. Для амортизаторов, прокладок, чехлов и всего, что должно гнуться и возвращать форму.",
+      "ABS": "Пока что он тоже в отпуске, но обещал вернуться, когда я куплю для него подходящий принтер! 😉"
+    };
+
     const filaments = filamentsData.map((item, index) => ({ ...item, id: index }));
     const container = document.getElementById('catalog');
     const filterBtns = document.querySelectorAll('.filter-btn');
+    const descElement = document.getElementById('filter-description');
 
     const logo = document.getElementById('main-logo');
     const toast = document.getElementById('toast');
@@ -384,6 +397,11 @@
       container.innerHTML = ''; 
       const filtered = filterType === 'all' ? filaments : filaments.filter(f => f.type === filterType);
 
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="empty-grid-msg">Материалов этого типа пока нет в палитре.</div>`;
+        return;
+      }
+
       filtered.forEach(f => {
         let visualHTML = '';
         const badgeHTML = `<div class="type-badge">${f.type}</div>`;
@@ -429,9 +447,18 @@
 
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
+        const filterType = btn.getAttribute('data-filter');
+        
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        renderCards(btn.getAttribute('data-filter'));
+        
+        descElement.style.opacity = 0;
+        setTimeout(() => {
+          descElement.innerText = filterDescriptions[filterType];
+          descElement.style.opacity = 1;
+        }, 150);
+        
+        renderCards(filterType);
       });
     });
 
