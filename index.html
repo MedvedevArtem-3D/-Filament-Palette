@@ -12,11 +12,20 @@
   <style>
     /* ГЛАВНЫЕ ЦВЕТА БРЕНДА */
     :root {
-      var(--brand-color): #1a5d3c; 
+      --brand-color: #1a5d3c; 
       --brand-glow: rgba(26, 93, 60, 0.4); 
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      /* Полностью отключаем синее мерцание при тапе на телефонах */
+      -webkit-tap-highlight-color: transparent; 
+    }
+    
+    /* Убираем стандартную обводку при клике */
+    button:focus, a:focus { outline: none; }
     
     body { 
       font-family: 'Inter', system-ui, sans-serif; 
@@ -31,7 +40,7 @@
     
     .header-section { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 40px; }
     .logo { width: 140px; height: 140px; object-fit: contain; margin-bottom: 24px; cursor: pointer; transition: transform 0.2s; }
-    .logo:active { transform: scale(0.95); } /* Тактильность для логотипа */
+    .logo:active { transform: scale(0.95); }
     
     .main-title { font-family: 'Forum', serif; font-size: 52px; color: #ffffff; font-weight: 400; letter-spacing: 3px; margin-bottom: 16px; }
 
@@ -50,8 +59,6 @@
       font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 0.5px;
     }
     .filter-btn.active { background: var(--brand-color); color: #fff; border-color: var(--brand-color); }
-    
-    /* Тактильность при КАСАНИИ (нажали пальцем) */
     .filter-btn:active { transform: scale(0.95); }
 
     .count { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; background: rgba(255, 255, 255, 0.15); padding: 3px 8px; border-radius: 12px; margin-left: 10px; }
@@ -69,13 +76,11 @@
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
     }
     
-    /* Эффект НАЖАТИЯ для мобильных устройств (карточка слегка продавливается) */
     .card:active {
       transform: scale(0.98);
       border-color: var(--brand-color);
     }
 
-    /* Эффект ПАРЕНИЯ только для устройств с мышкой (ПК) */
     @media (hover: hover) {
       .card:hover {
         transform: translateY(-6px);
@@ -100,10 +105,12 @@
     }
     .carousel-img.active { opacity: 1; z-index: 1; }
     
+    /* Плашка материала теперь в фирменном акцентном цвете */
     .type-badge {
       font-family: 'Montserrat', sans-serif; position: absolute; top: 14px; right: 14px;
-      background: rgba(20, 20, 20, 0.85); color: #ffffff; padding: 4px 10px;
-      border-radius: 12px; font-size: 12px; font-weight: 300; z-index: 3; letter-spacing: 0.5px;
+      background: var(--brand-color); color: #ffffff; padding: 4px 10px;
+      border-radius: 12px; font-size: 12px; font-weight: 600; z-index: 3; letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     
     .nav-btn {
@@ -112,9 +119,8 @@
       border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
       opacity: 0; transition: opacity 0.2s; font-size: 16px;
     }
-    /* Показываем стрелки при наведении только на ПК */
     @media (hover: hover) { .carousel:hover .nav-btn { opacity: 1; } }
-    .nav-btn:active { transform: translateY(-50%) scale(0.9); } /* Тактильность для стрелок */
+    .nav-btn:active { transform: translateY(-50%) scale(0.9); }
     
     .nav-btn.left { left: 12px; }
     .nav-btn.right { right: 12px; }
@@ -156,14 +162,15 @@
     }
     .toast.show { bottom: 40px; }
 
-    /* ПЛАВАЮЩАЯ КНОПКА СВЯЗИ */
+    /* ПЛАВАЮЩАЯ КНОПКА СВЯЗИ (CTA) без иконки */
     .fab-vk {
       position: fixed; bottom: 30px; right: 30px; background: var(--brand-color); color: #ffffff;
-      padding: 14px 24px; border-radius: 30px; text-decoration: none; font-family: 'Montserrat', sans-serif;
-      font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 12px;
+      padding: 14px 28px; /* Немного увеличил отступы по бокам, чтобы текстовая кнопка смотрелась гармонично */
+      border-radius: 30px; text-decoration: none; font-family: 'Montserrat', sans-serif;
+      font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center;
       box-shadow: 0 8px 20px var(--brand-glow); transition: all 0.2s; z-index: 1000;
     }
-    .fab-vk:active { transform: scale(0.95); } /* Тактильность кнопки ВК на телефоне */
+    .fab-vk:active { transform: scale(0.95); } 
 
     @media (max-width: 768px) {
       .content-wrapper { padding: 16px 16px 80px; }
@@ -175,7 +182,7 @@
       .filter-btn { font-size: 13px; padding: 8px 16px; }
       .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
       .color-swatch, .carousel { height: 160px; }
-      .type-badge { font-size: 11px; padding: 3px 8px; border-radius: 8px; }
+      .type-badge { font-size: 11px; padding: 4px 8px; border-radius: 8px; }
       .nav-btn { opacity: 1; background: rgba(0, 0, 0, 0.4); }
       .color-name { font-size: 16px; }
       .lightbox-nav { width: 40px; height: 40px; font-size: 18px; }
@@ -186,7 +193,8 @@
       .lightbox-title { bottom: 20px; font-size: 16px; width: 100%; padding: 0 16px; }
       .toast { width: 90%; font-size: 13px; padding: 14px 20px; bottom: -120px; }
       .toast.show { bottom: 90px; }
-      .fab-vk { bottom: 20px; right: 20px; padding: 12px 20px; font-size: 14px; }
+      
+      .fab-vk { bottom: 20px; right: 20px; padding: 12px 24px; font-size: 14px; }
     }
   </style>
 </head>
@@ -217,10 +225,8 @@
     © 2026 Medvedev Artem 3D Studio
   </footer>
 
+  <!-- Обновленная кнопка связи (без SVG иконки) -->
   <a href="https://vk.com/id184420359" target="_blank" class="fab-vk">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M2.25 12C2.25 6.615 6.615 2.25 12 2.25C17.385 2.25 21.75 6.615 21.75 12C21.75 17.385 17.385 21.75 12 21.75C6.615 21.75 2.25 17.385 2.25 12ZM13.8828 14.8016C13.8828 14.8016 14.1937 14.8016 14.3976 14.6541C14.5828 14.5202 14.6062 14.2125 14.6062 14.2125C14.6062 14.2125 14.6367 13.0641 15.1102 12.9234C15.5742 12.7875 16.1742 13.9102 16.8094 14.3648C17.2922 14.7141 17.7023 14.6461 17.7023 14.6461L19.4977 14.618C19.4977 14.618 20.4352 14.557 20.0062 13.8328C19.9711 13.7719 19.6453 13.0336 18.232 11.6602C16.7578 10.2281 16.9453 10.4391 18.7242 8.04609C19.807 6.58828 20.2406 5.68828 20.0977 5.30859C19.9617 4.94531 19.1672 5.03203 19.1672 5.03203L17.1562 5.05781C17.1562 5.05781 16.9992 5.04375 16.8633 5.12344C16.732 5.20078 16.643 5.38594 16.643 5.38594C16.643 5.38594 16.3266 6.22031 15.8648 7.01484C14.8922 8.68828 14.5055 8.775 14.3438 8.66719C13.9641 8.41875 14.0578 7.66875 14.0578 7.15312C14.0578 5.53828 14.2992 4.84922 13.568 4.67344C13.3242 4.61484 13.1414 4.575 12.443 4.56562C11.5453 4.55391 10.793 4.56094 10.4 4.75781C10.1344 4.88906 9.93281 5.17734 10.0523 5.19609C10.1977 5.21953 10.5258 5.34141 10.6922 5.67656C10.9055 6.11016 10.8984 6.96797 10.8984 6.96797C10.8984 6.96797 11.1211 8.84766 10.6125 9.12422C10.2633 9.31406 9.78984 8.92266 8.82891 7.23047C8.33672 6.36094 8.03203 5.45625 8.03203 5.45625C8.03203 5.45625 7.95469 5.26641 7.81875 5.16562C7.65937 5.04844 7.44375 5.01328 7.44375 5.01328L5.53594 5.025C5.53594 5.025 5.24766 5.03437 5.13984 5.15859C5.04375 5.26875 5.13047 5.49844 5.13047 5.49844C5.13047 5.49844 6.61172 8.97188 8.28047 10.7109C9.80859 12.3023 11.4586 12.1875 11.4586 12.1875L11.5172 14.2828C11.5172 14.2828 11.4703 14.5664 11.6039 14.6859C11.7258 14.7938 11.9742 14.7891 11.9742 14.7891L13.8828 14.8016Z" fill="currentColor"/>
-    </svg>
     Заказать печать
   </a>
 
