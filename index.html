@@ -15,98 +15,68 @@
       flex-direction: column;
     }
     
-    /* Основной контейнер растянут на весь экран */
-    .content-wrapper {
-      padding: 30px 40px 40px;
-      flex-grow: 1;
-      width: 100%;
-    }
+    .content-wrapper { padding: 30px 40px 40px; flex-grow: 1; width: 100%; }
+    .top-bar { display: flex; flex-direction: row; align-items: center; margin-bottom: 30px; width: 100%; }
+    .logo { width: 80px; height: 80px; object-fit: contain; margin-right: 40px; }
 
-    /* Верхний блок: Логотип и фильтры в одну строку */
-    .top-bar {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      margin-bottom: 30px;
-      width: 100%;
-    }
-
-    /* Логотип строго слева */
-    .logo {
-      width: 80px;
-      height: 80px;
-      object-fit: contain;
-      margin-right: 40px; /* Отступ от логотипа до фильтров */
-    }
-
-    /* Фильтры */
-    .filters {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+    .filters { display: flex; gap: 12px; flex-wrap: wrap; }
     .filter-btn {
-      display: inline-flex;
-      align-items: center;
-      background: transparent;
-      color: #ccc;
-      border: 1px solid #444;
-      padding: 6px 14px 6px 18px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s;
+      display: inline-flex; align-items: center; background: transparent;
+      color: #ccc; border: 1px solid #444; padding: 6px 14px 6px 18px;
+      border-radius: 20px; cursor: pointer; font-size: 14px; transition: all 0.2s;
     }
     .filter-btn:hover { border-color: #888; color: #fff; }
     .filter-btn.active { background: #555; color: #fff; border-color: #555; }
     
-    .count {
-      font-size: 11px;
-      background: rgba(255, 255, 255, 0.15);
-      padding: 2px 6px;
-      border-radius: 10px;
-      margin-left: 8px;
-    }
+    .count { font-size: 11px; background: rgba(255, 255, 255, 0.15); padding: 2px 6px; border-radius: 10px; margin-left: 8px; }
     .filter-btn.active .count { background: rgba(255, 255, 255, 0.3); }
 
-    /* Сетка карточек: заполняет всю ширину */
-    .grid { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-      gap: 20px; 
-    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
 
-    .card { 
-      background: #181818; 
-      border-radius: 12px; 
-      overflow: hidden; 
-      border: 1px solid #333;
-      display: flex;
-      flex-direction: column;
+    .card { background: #181818; border-radius: 12px; overflow: hidden; border: 1px solid #333; display: flex; flex-direction: column; }
+    
+    /* Стили для карусели и цветовой плашки */
+    .color-swatch, .carousel { height: 160px; width: 100%; position: relative; background: #222; }
+    .carousel { overflow: hidden; }
+    .carousel-img { 
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+      object-fit: cover; opacity: 0; transition: opacity 0.3s ease; 
     }
-    .color-swatch { height: 140px; width: 100%; }
+    .carousel-img.active { opacity: 1; z-index: 1; }
+    
+    /* Навигация карусели (стрелки и точки) */
+    .nav-btn {
+      position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+      background: rgba(0, 0, 0, 0.6); color: white; border: none;
+      width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.2s; font-size: 14px;
+    }
+    .carousel:hover .nav-btn { opacity: 1; }
+    .nav-btn.left { left: 8px; }
+    .nav-btn.right { right: 8px; }
+    
+    .dots {
+      position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+      z-index: 2; display: flex; gap: 6px;
+    }
+    .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 50%; }
+    .dot.active { background: #fff; }
+
     .info { padding: 15px; font-size: 14px; }
     .type { font-weight: 700; color: #ffffff; font-size: 12px; margin-bottom: 4px; }
     .color-name { color: #ffffff; font-size: 16px; margin-bottom: 2px; }
     .brand { color: #888888; font-size: 12px; min-height: 14px; }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 12px;
-      color: #666;
-      border-top: 1px solid #333;
-      margin-top: auto;
-    }
+    footer { text-align: center; padding: 20px; font-size: 12px; color: #666; border-top: 1px solid #333; margin-top: auto; }
 
-    /* Адаптация под телефоны */
     @media (max-width: 600px) {
       .content-wrapper { padding: 16px; }
-      /* На телефонах логотип сверху, фильтры под ним */
       .top-bar { flex-direction: column; align-items: flex-start; }
       .logo { margin-bottom: 16px; margin-right: 0; width: 60px; height: 60px; }
       .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-      .color-swatch { height: 100px; }
+      .color-swatch, .carousel { height: 120px; }
+      .nav-btn { opacity: 1; /* На мобильных стрелки видны всегда */ background: rgba(0, 0, 0, 0.4); }
     }
   </style>
 </head>
@@ -134,27 +104,45 @@
   </footer>
 
   <script>
+    // Если есть фото - пишем их в массив images: ["1.jpg", "2.jpg"]. Если нет - оставляем только hex.
     const filaments = [
-      { type: "PLA", name: "Синий темный", hex: "#061D62" },  
+      { type: "PLA", name: "Синий темный", images: ["blue_1.jpg", "blue_2.jpg"], hex: "#061D62" },  
+      { type: "PETG", name: "Оранжевый", images: ["orange_1.jpg", "orange_2.jpg", "orange_3.jpg"], hex: "#ff6600" },
       { type: "PETG", name: "Красный темный", hex: "#A70707" },
       { type: "PETG", name: "Розовый", hex: "#F3C1BB" },
       { type: "PETG", name: "Бежевый", hex: "#E4C48A" },
       { type: "PETG", name: "Серо-Бежевый", hex: "#BFAA92" },
-      { type: "PETG", name: "Оранжевый", hex: "#ff6600" },
       { type: "PETG", name: "Желтый", hex: "#F3CE2A" },
       { type: "PETG-CF", name: "Черный(карбон)", hex: "#272626" },
       { type: "TPU", name: "Черный", hex: "#000000" },
-      { type: "PETG", name: "Черный", hex: "#000000" },
       { type: "PETG", name: "Белый", hex: "#ffffff" },
-      { type: "PETG", name: "Серый", hex: "#63676c" },
-      { type: "PETG", name: "Синий", hex: "#1d387b" },
-      { type: "PETG", name: "Зеленый темный", hex: "#274F11" },
-      { type: "PETG", name: "Зеленый", hex: "#0ECE1E" },
       { type: "PLA", name: "Слоновая кость", hex: "#EBE7DB" },
     ];
 
     const container = document.getElementById('catalog');
     const filterBtns = document.querySelectorAll('.filter-btn');
+
+    // Функция переключения слайдов (вызывается по клику на стрелки)
+    window.switchSlide = function(event, direction, btn) {
+      event.stopPropagation(); // предотвращает случайные клики по карточке
+      const carousel = btn.closest('.carousel');
+      const slides = carousel.querySelectorAll('.carousel-img');
+      const dots = carousel.querySelectorAll('.dot');
+      
+      let activeIndex = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
+      
+      slides[activeIndex].classList.remove('active');
+      dots[activeIndex].classList.remove('active');
+      
+      if (direction === 'next') {
+        activeIndex = (activeIndex + 1) % slides.length;
+      } else {
+        activeIndex = (activeIndex - 1 + slides.length) % slides.length;
+      }
+      
+      slides[activeIndex].classList.add('active');
+      dots[activeIndex].classList.add('active');
+    };
 
     function renderCards(filterType) {
       container.innerHTML = ''; 
@@ -165,10 +153,31 @@
 
       filtered.forEach(f => {
         const brandText = f.brand ? f.brand : '';
+        let visualHTML = '';
+
+        // Проверяем, есть ли фотографии
+        if (f.images && f.images.length > 0) {
+          const imgsHTML = f.images.map((img, i) => `<img src="${img}" class="carousel-img ${i === 0 ? 'active' : ''}" loading="lazy">`).join('');
+          
+          let navHTML = '';
+          if (f.images.length > 1) {
+            navHTML = `
+              <button class="nav-btn left" onclick="switchSlide(event, 'prev', this)">&#10094;</button>
+              <button class="nav-btn right" onclick="switchSlide(event, 'next', this)">&#10095;</button>
+              <div class="dots">
+                ${f.images.map((_, i) => `<div class="dot ${i === 0 ? 'active' : ''}"></div>`).join('')}
+              </div>
+            `;
+          }
+          visualHTML = `<div class="carousel">${imgsHTML}${navHTML}</div>`;
+        } else {
+          // Запасной вариант: цветная плашка
+          visualHTML = `<div class="color-swatch" style="background-color: ${f.hex}"></div>`;
+        }
         
         container.innerHTML += `
           <div class="card">
-            <div class="color-swatch" style="background-color: ${f.hex}"></div>
+            ${visualHTML}
             <div class="info">
               <div class="type">${f.type}</div>
               <div class="color-name">${f.name}</div>
@@ -181,12 +190,10 @@
     function updateCounts() {
       filterBtns.forEach(btn => {
         const filter = btn.getAttribute('data-filter');
-        const count = filter === 'all' 
-          ? filaments.length 
-          : filaments.filter(f => f.type === filter).length;
-        
-        const btnText = btn.textContent.trim();
-        btn.innerHTML = `${btnText} <span class="count">${count}</span>`;
+        const count = filter === 'all' ? filaments.length : filaments.filter(f => f.type === filter).length;
+        // Убираем старый счетчик перед обновлением
+        const cleanText = btn.innerHTML.split('<span')[0].trim();
+        btn.innerHTML = `${cleanText} <span class="count">${count}</span>`;
       });
     }
 
