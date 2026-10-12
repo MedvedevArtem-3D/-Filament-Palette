@@ -211,7 +211,8 @@
     </header>
     
     <div class="filters" id="filters">
-      <button class="filter-btn active" data-filter="all">All</button>
+      <!-- Заменено на «Все цвета» с сохранением data-filter="all" для логики -->
+      <button class="filter-btn active" data-filter="all">Все цвета</button>
       <button class="filter-btn" data-filter="PLA">PLA</button>
       <button class="filter-btn" data-filter="PETG">PETG</button>
       <button class="filter-btn" data-filter="TPU">TPU</button>
@@ -243,7 +244,6 @@
   <div id="toast" class="toast">Не все сразу 😉<br>Главная страница ещё не вернулась из отпуска!</div>
 
   <script>
-    // Массив материалов с вашими русскими названиями файлов изображений
     const filamentsData = [
       { type: "PLA", name: "Синий темный", images: ["Синий_темный_1.jpg", "Синий_темный_2.jpg"], hex: "#061D62" },  
       { type: "PETG", name: "Синий", images: ["Синий_1.jpg", "Синий_2.jpg"], hex: "#144FC7" }, 
