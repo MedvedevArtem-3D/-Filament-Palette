@@ -23,115 +23,60 @@
     
     .content-wrapper { padding: 40px 40px 60px; flex-grow: 1; width: 100%; max-width: 1600px; margin: 0 auto; }
     
-    /* Центральная композиция шапки */
-    .header-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      margin-bottom: 40px;
-    }
+    .header-section { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 40px; }
+    .logo { width: 140px; height: 140px; object-fit: contain; margin-bottom: 24px; }
+    .main-title { font-family: 'Forum', serif; font-size: 52px; color: #ffffff; font-weight: 400; letter-spacing: 3px; margin-bottom: 20px; }
 
-    /* Крупный логотип по центру */
-    .logo { 
-      width: 140px; 
-      height: 140px; 
-      object-fit: contain; 
-      margin-bottom: 24px;
-    }
-
-    /* Главный заголовок */
-    .main-title {
-      font-family: 'Forum', serif;
-      font-size: 52px;
-      color: #ffffff;
-      font-weight: 400;
-      letter-spacing: 3px;
-      margin-bottom: 20px;
-    }
-
-    /* Едва заметная плашка-дисклеймер */
     .disclaimer {
-      font-size: 12px;
-      line-height: 1.6;
-      color: #777777; /* Приглушенный текст */
-      max-width: 650px;
-      background: rgba(255, 255, 255, 0.02); /* Почти прозрачный фон */
-      padding: 14px 20px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.05); /* Едва видимая рамка */
+      font-size: 12px; line-height: 1.6; color: #777777; max-width: 650px;
+      background: rgba(255, 255, 255, 0.02); padding: 14px 20px;
+      border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    /* Фильтры: жирный Montserrat */
     .filters { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 50px; }
     .filter-btn {
       display: inline-flex; align-items: center; background: transparent;
       color: #ccc; border: 1px solid #444; padding: 8px 18px 8px 22px;
       border-radius: 24px; cursor: pointer; font-size: 14px; transition: all 0.2s;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 600; /* Делаем шрифт жирным */
-      letter-spacing: 0.5px;
+      font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 0.5px;
     }
     .filter-btn:hover { border-color: #888; color: #fff; }
     .filter-btn.active { background: #555; color: #fff; border-color: #555; }
     
-    .count { 
-      font-family: 'Inter', sans-serif; /* Цифры оставляем в Inter для лучшей читаемости */
-      font-weight: 500;
-      font-size: 12px; 
-      background: rgba(255, 255, 255, 0.15); 
-      padding: 3px 8px; 
-      border-radius: 12px; 
-      margin-left: 10px; 
-    }
+    .count { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; background: rgba(255, 255, 255, 0.15); padding: 3px 8px; border-radius: 12px; margin-left: 10px; }
     .filter-btn.active .count { background: rgba(255, 255, 255, 0.3); }
 
-    /* Сетка карточек */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-
     .card { background: #1a1a1a; border-radius: 14px; overflow: hidden; border: 1px solid #333; display: flex; flex-direction: column; }
     
     .color-swatch, .carousel { height: 240px; width: 100%; position: relative; background: #222; }
     .carousel { overflow: hidden; touch-action: pan-y; }
     
+    /* Добавлен cursor: zoom-in для подсказки, что фото кликабельно */
     .carousel-img { 
       position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
       object-fit: cover; opacity: 0; transition: opacity 0.3s ease; 
-      user-select: none; -webkit-user-drag: none; 
+      user-select: none; -webkit-user-drag: none; cursor: zoom-in;
     }
     .carousel-img.active { opacity: 1; z-index: 1; }
     
-    /* Плашка материала */
     .type-badge {
-      font-family: 'Montserrat', sans-serif;
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      background: rgba(20, 20, 20, 0.85);
-      color: #ffffff;
-      padding: 6px 14px;
-      border-radius: 16px;
-      font-size: 16px;
-      font-weight: 700;
-      z-index: 3;
-      letter-spacing: 0.5px;
+      font-family: 'Montserrat', sans-serif; position: absolute; top: 14px; right: 14px;
+      background: rgba(20, 20, 20, 0.85); color: #ffffff; padding: 6px 14px;
+      border-radius: 16px; font-size: 16px; font-weight: 700; z-index: 3; letter-spacing: 0.5px;
     }
     
     .nav-btn {
       position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
-      background: rgba(0, 0, 0, 0.6); color: white; border: none;
-      width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
+      background: rgba(0, 0, 0, 0.6); color: white; border: none; width: 32px; height: 32px; 
+      border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
       opacity: 0; transition: opacity 0.2s; font-size: 16px;
     }
     .carousel:hover .nav-btn { opacity: 1; }
     .nav-btn.left { left: 12px; }
     .nav-btn.right { right: 12px; }
     
-    .dots {
-      position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
-      z-index: 2; display: flex; gap: 8px;
-    }
+    .dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; gap: 8px; }
     .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.4); border-radius: 50%; }
     .dot.active { background: #fff; }
 
@@ -140,33 +85,71 @@
 
     footer { text-align: center; padding: 24px; font-size: 13px; color: #666; border-top: 1px solid #333; margin-top: auto; }
 
-    /* Адаптация под телефоны */
+    /* СТИЛИ ДЛЯ ЛАЙТБОКСА (Полноэкранный просмотр) */
+    .lightbox {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.95); z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+      touch-action: none; /* Блокируем скролл самого сайта под фото */
+    }
+    .lightbox.active { opacity: 1; pointer-events: auto; }
+    .lightbox-img {
+      max-width: 90%; max-height: 85%; border-radius: 8px;
+      object-fit: contain; user-select: none; -webkit-user-drag: none;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .lightbox-close {
+      position: absolute; top: 20px; right: 30px; color: white;
+      font-size: 40px; cursor: pointer; z-index: 10000; font-family: sans-serif;
+      transition: color 0.2s;
+    }
+    .lightbox-close:hover { color: #aaa; }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.1); color: white; border: none;
+      width: 50px; height: 50px; border-radius: 50%; cursor: pointer;
+      font-size: 24px; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; z-index: 10000;
+    }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
+    .lightbox-prev { left: 30px; }
+    .lightbox-next { right: 30px; }
+    .lightbox-title {
+      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+      color: white; font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 600;
+    }
+
     @media (max-width: 768px) {
       .content-wrapper { padding: 16px; }
       .header-section { margin-bottom: 24px; }
       .logo { width: 100px; height: 100px; margin-bottom: 16px; }
       .main-title { font-size: 34px; margin-bottom: 16px; letter-spacing: 1px; }
       .disclaimer { font-size: 11px; padding: 12px; text-align: center; }
-      
       .filters { gap: 10px; margin-bottom: 30px; }
       .filter-btn { font-size: 13px; padding: 8px 16px; }
-      
       .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
       .color-swatch, .carousel { height: 160px; }
       .type-badge { font-size: 14px; padding: 4px 10px; }
       .nav-btn { opacity: 1; background: rgba(0, 0, 0, 0.4); }
       .color-name { font-size: 16px; }
+      
+      /* Адаптация лайтбокса для телефона */
+      .lightbox-nav { width: 40px; height: 40px; font-size: 18px; }
+      .lightbox-prev { left: 10px; }
+      .lightbox-next { right: 10px; }
+      .lightbox-close { top: 10px; right: 20px; font-size: 36px; }
+      .lightbox-img { max-width: 100%; max-height: 75%; border-radius: 0; }
+      .lightbox-title { bottom: 20px; font-size: 16px; text-align: center; width: 100%; padding: 0 16px; }
     }
   </style>
 </head>
 <body>
 
   <div class="content-wrapper">
-    <!-- Шапка сайта -->
     <header class="header-section">
       <img src="logo.png" alt="Medvedev Artem 3D Studio" class="logo" onerror="this.style.display='none'">
       <h1 class="main-title">ПАЛИТРА ФИЛАМЕНТА</h1>
-      
       <div class="disclaimer">
         На фото я старался показать товары так, как они выглядят в реальности — с честной цветопередачей и правильным освещением. Но каждый экран отображает цвета по-своему, поэтому возможны небольшие отличия между фото и реальным изделием. Если у вас есть вопросы по оттенкам — напишите мне, я помогу!
       </div>
@@ -188,8 +171,18 @@
     © 2026 Medvedev Artem 3D Studio
   </footer>
 
+  <!-- HTML каркас Лайтбокса -->
+  <div id="lightbox" class="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <button class="lightbox-nav lightbox-prev" onclick="changeLightboxSlide(event, 'prev')">&#10094;</button>
+    <img id="lightbox-img" class="lightbox-img" src="" alt="" onclick="event.stopPropagation()">
+    <button class="lightbox-nav lightbox-next" onclick="changeLightboxSlide(event, 'next')">&#10095;</button>
+    <div id="lightbox-title" class="lightbox-title"></div>
+  </div>
+
   <script>
-    const filaments = [
+    // Исходные данные. Добавлено поле id для точного определения карточки при открытии фото.
+    const filamentsData = [
       { type: "PLA", name: "Синий темный", images: ["blue_1.jpg", "blue_2.jpg"], hex: "#061D62" },  
       { type: "PETG", name: "Оранжевый", images: ["orange_1.jpg", "orange_2.jpg", "orange_3.jpg"], hex: "#ff6600" },
       { type: "PETG", name: "Красный темный", hex: "#A70707" },
@@ -203,16 +196,19 @@
       { type: "PLA", name: "Слоновая кость", hex: "#EBE7DB" },
     ];
 
+    // Присваиваем каждому элементу уникальный ID
+    const filaments = filamentsData.map((item, index) => ({ ...item, id: index }));
+
     const container = document.getElementById('catalog');
     const filterBtns = document.querySelectorAll('.filter-btn');
 
+    // Логика карточек (внутри сетки)
     function changeSlide(carousel, direction) {
       const slides = carousel.querySelectorAll('.carousel-img');
       const dots = carousel.querySelectorAll('.dot');
       if (slides.length <= 1) return;
       
       let activeIndex = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
-      
       slides[activeIndex].classList.remove('active');
       dots[activeIndex].classList.remove('active');
       
@@ -227,14 +223,13 @@
     }
 
     window.switchSlide = function(event, direction, btn) {
-      event.stopPropagation();
+      event.stopPropagation(); // Блокируем всплытие, чтобы не открывался лайтбокс при клике на стрелку
       const carousel = btn.closest('.carousel');
       changeSlide(carousel, direction);
     };
 
-    let touchstartX = 0;
-    let touchendX = 0;
-
+    // СВАЙПЫ ДЛЯ КАРТОЧЕК
+    let touchstartX = 0; let touchendX = 0;
     container.addEventListener('touchstart', e => {
       const carousel = e.target.closest('.carousel');
       if (!carousel) return;
@@ -245,32 +240,86 @@
       const carousel = e.target.closest('.carousel');
       if (!carousel) return;
       touchendX = e.changedTouches[0].screenX;
-      handleSwipe(carousel);
+      if (touchendX < touchstartX - 40) changeSlide(carousel, 'next');
+      if (touchendX > touchstartX + 40) changeSlide(carousel, 'prev');
     });
 
-    function handleSwipe(carousel) {
-      const swipeThreshold = 40;
-      if (touchendX < touchstartX - swipeThreshold) {
-        changeSlide(carousel, 'next');
+    // ЛОГИКА ЛАЙТБОКСА
+    let currentLightboxId = null;
+    let currentImageIndex = 0;
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxTitle = document.getElementById('lightbox-title');
+
+    window.openLightbox = function(id, imgIndex) {
+      currentLightboxId = id;
+      currentImageIndex = imgIndex;
+      updateLightboxImage();
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Убираем скролл сайта
+    };
+
+    window.closeLightbox = function() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = ''; // Возвращаем скролл
+    };
+
+    window.changeLightboxSlide = function(event, direction) {
+      event.stopPropagation();
+      const filament = filaments.find(f => f.id === currentLightboxId);
+      if (!filament || !filament.images) return;
+
+      if (direction === 'next') {
+        currentImageIndex = (currentImageIndex + 1) % filament.images.length;
+      } else {
+        currentImageIndex = (currentImageIndex - 1 + filament.images.length) % filament.images.length;
       }
-      if (touchendX > touchstartX + swipeThreshold) {
-        changeSlide(carousel, 'prev');
+      updateLightboxImage();
+    };
+
+    function updateLightboxImage() {
+      const filament = filaments.find(f => f.id === currentLightboxId);
+      if (filament && filament.images) {
+        lightboxImg.src = filament.images[currentImageIndex];
+        lightboxTitle.innerText = `${filament.type} — ${filament.name}`;
+        
+        // Прячем стрелки, если фото всего одно
+        const navBtns = lightbox.querySelectorAll('.lightbox-nav');
+        navBtns.forEach(btn => btn.style.display = filament.images.length > 1 ? 'flex' : 'none');
       }
     }
 
+    // Закрытие лайтбокса при клике на пустой фон
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    // Свайпы для лайтбокса на телефонах
+    let lbTouchstartX = 0; let lbTouchendX = 0;
+    lightbox.addEventListener('touchstart', e => {
+      lbTouchstartX = e.changedTouches[0].screenX;
+    }, {passive: true});
+    
+    lightbox.addEventListener('touchend', e => {
+      lbTouchendX = e.changedTouches[0].screenX;
+      if (lbTouchendX < lbTouchstartX - 40) changeLightboxSlide(e, 'next');
+      if (lbTouchendX > lbTouchstartX + 40) changeLightboxSlide(e, 'prev');
+    });
+
+    // Отрисовка
     function renderCards(filterType) {
       container.innerHTML = ''; 
-      
-      const filtered = filterType === 'all' 
-        ? filaments 
-        : filaments.filter(f => f.type === filterType);
+      const filtered = filterType === 'all' ? filaments : filaments.filter(f => f.type === filterType);
 
       filtered.forEach(f => {
         let visualHTML = '';
         const badgeHTML = `<div class="type-badge">${f.type}</div>`;
 
         if (f.images && f.images.length > 0) {
-          const imgsHTML = f.images.map((img, i) => `<img src="${img}" class="carousel-img ${i === 0 ? 'active' : ''}" loading="lazy">`).join('');
+          // На картинку повешен onclick для вызова лайтбокса
+          const imgsHTML = f.images.map((img, i) => 
+            `<img src="${img}" class="carousel-img ${i === 0 ? 'active' : ''}" loading="lazy" onclick="openLightbox(${f.id}, ${i})">`
+          ).join('');
           
           let navHTML = '';
           if (f.images.length > 1) {
