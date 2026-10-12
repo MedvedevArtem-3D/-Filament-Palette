@@ -10,6 +10,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Forum&family=Inter:wght@400;500&family=Montserrat:wght@300;600;700&display=swap" rel="stylesheet">
   
   <style>
+    /* ГЛАВНЫЕ ЦВЕТА БРЕНДА */
+    :root {
+      var(--brand-color): #1a5d3c; 
+      --brand-glow: rgba(26, 93, 60, 0.4); 
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
@@ -24,40 +30,65 @@
     .content-wrapper { padding: 40px 40px 60px; flex-grow: 1; width: 100%; max-width: 1600px; margin: 0 auto; }
     
     .header-section { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 40px; }
-    
-    /* Логотип теперь кликабельный */
-    .logo { width: 140px; height: 140px; object-fit: contain; margin-bottom: 24px; cursor: pointer; }
+    .logo { width: 140px; height: 140px; object-fit: contain; margin-bottom: 24px; cursor: pointer; transition: transform 0.2s; }
+    .logo:active { transform: scale(0.95); } /* Тактильность для логотипа */
     
     .main-title { font-family: 'Forum', serif; font-size: 52px; color: #ffffff; font-weight: 400; letter-spacing: 3px; margin-bottom: 16px; }
 
-    /* Обновленный дисклеймер: без рамки, на всю ширину, прозрачный фон */
     .disclaimer {
-      font-size: 13px; 
-      line-height: 1.6; 
-      color: #777777; 
-      width: 100%; 
-      max-width: 900px; /* Легкое ограничение ширины для комфортного чтения */
-      background: transparent; 
-      border: none;
-      text-align: center;
-      margin-top: 10px;
+      font-size: 13px; line-height: 1.6; color: #777777; width: 100%; max-width: 900px; 
+      background: transparent; border: none; text-align: center; margin-top: 10px;
     }
 
     .filters { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 50px; margin-top: 30px; }
+    
     .filter-btn {
       display: inline-flex; align-items: center; background: transparent;
       color: #ccc; border: 1px solid #444; padding: 8px 18px 8px 22px;
-      border-radius: 24px; cursor: pointer; font-size: 14px; transition: all 0.2s;
+      border-radius: 24px; cursor: pointer; font-size: 14px; 
+      transition: transform 0.1s, border-color 0.2s, background 0.2s, color 0.2s;
       font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 0.5px;
     }
-    .filter-btn:hover { border-color: #888; color: #fff; }
-    .filter-btn.active { background: #555; color: #fff; border-color: #555; }
+    .filter-btn.active { background: var(--brand-color); color: #fff; border-color: var(--brand-color); }
     
+    /* Тактильность при КАСАНИИ (нажали пальцем) */
+    .filter-btn:active { transform: scale(0.95); }
+
     .count { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; background: rgba(255, 255, 255, 0.15); padding: 3px 8px; border-radius: 12px; margin-left: 10px; }
     .filter-btn.active .count { background: rgba(255, 255, 255, 0.3); }
 
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-    .card { background: #1a1a1a; border-radius: 14px; overflow: hidden; border: 1px solid #333; display: flex; flex-direction: column; }
+    
+    .card { 
+      background: #1a1a1a; 
+      border-radius: 14px; 
+      overflow: hidden; 
+      border: 1px solid #333; 
+      display: flex; 
+      flex-direction: column;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    
+    /* Эффект НАЖАТИЯ для мобильных устройств (карточка слегка продавливается) */
+    .card:active {
+      transform: scale(0.98);
+      border-color: var(--brand-color);
+    }
+
+    /* Эффект ПАРЕНИЯ только для устройств с мышкой (ПК) */
+    @media (hover: hover) {
+      .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.5), 0 0 20px var(--brand-glow);
+        border-color: var(--brand-color);
+      }
+      .filter-btn:hover:not(.active) { border-color: #888; color: #fff; }
+      
+      .fab-vk:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 12px 25px var(--brand-glow);
+      }
+    }
     
     .color-swatch, .carousel { height: 240px; width: 100%; position: relative; background: #222; }
     .carousel { overflow: hidden; touch-action: pan-y; }
@@ -81,7 +112,10 @@
       border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
       opacity: 0; transition: opacity 0.2s; font-size: 16px;
     }
-    .carousel:hover .nav-btn { opacity: 1; }
+    /* Показываем стрелки при наведении только на ПК */
+    @media (hover: hover) { .carousel:hover .nav-btn { opacity: 1; } }
+    .nav-btn:active { transform: translateY(-50%) scale(0.9); } /* Тактильность для стрелок */
+    
     .nav-btn.left { left: 12px; }
     .nav-btn.right { right: 12px; }
     
@@ -89,7 +123,7 @@
     .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.4); border-radius: 50%; }
     .dot.active { background: #fff; }
 
-    .info { padding: 20px; }
+    .info { padding: 20px; pointer-events: none; }
     .color-name { color: #ffffff; font-size: 18px; font-weight: 500; margin: 0; }
 
     footer { text-align: center; padding: 24px; font-size: 13px; color: #666; border-top: 1px solid #333; margin-top: auto; }
@@ -97,61 +131,42 @@
     /* Лайтбокс */
     .lightbox {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.95); z-index: 9999;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-      touch-action: none;
+      background: rgba(0, 0, 0, 0.95); z-index: 9999; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease; touch-action: none;
     }
     .lightbox.active { opacity: 1; pointer-events: auto; }
-    .lightbox-img {
-      max-width: 90%; max-height: 85%; border-radius: 8px;
-      object-fit: contain; user-select: none; -webkit-user-drag: none;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    .lightbox-close {
-      position: absolute; top: 20px; right: 30px; color: white;
-      font-size: 40px; cursor: pointer; z-index: 10000; font-family: sans-serif;
-      transition: color 0.2s;
-    }
-    .lightbox-close:hover { color: #aaa; }
+    .lightbox-img { max-width: 90%; max-height: 85%; border-radius: 8px; object-fit: contain; user-select: none; -webkit-user-drag: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .lightbox-close { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; z-index: 10000; font-family: sans-serif; transition: color 0.2s; }
+    .lightbox-close:active { transform: scale(0.9); }
     .lightbox-nav {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      background: rgba(255,255,255,0.1); color: white; border: none;
-      width: 50px; height: 50px; border-radius: 50%; cursor: pointer;
-      font-size: 24px; display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s; z-index: 10000;
+      position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: white; border: none;
+      width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.1s; z-index: 10000;
     }
-    .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
+    .lightbox-nav:active { transform: translateY(-50%) scale(0.9); }
     .lightbox-prev { left: 30px; }
     .lightbox-next { right: 30px; }
-    .lightbox-title {
-      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-      color: white; font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 600; text-align: center;
-    }
+    .lightbox-title { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: white; font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 600; text-align: center; }
 
-    /* Всплывающее уведомление (Toast) */
+    /* Тост уведомление */
     .toast {
-      position: fixed;
-      bottom: -100px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #2a2a2a;
-      color: #fff;
-      padding: 16px 24px;
-      border-radius: 12px;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      border: 1px solid #444;
-      transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Пружинистая анимация */
-      z-index: 10000;
-      line-height: 1.5;
+      position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: #2a2a2a; color: #fff;
+      padding: 16px 24px; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 14px; text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid #444; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 10000; line-height: 1.5;
     }
     .toast.show { bottom: 40px; }
 
+    /* ПЛАВАЮЩАЯ КНОПКА СВЯЗИ */
+    .fab-vk {
+      position: fixed; bottom: 30px; right: 30px; background: var(--brand-color); color: #ffffff;
+      padding: 14px 24px; border-radius: 30px; text-decoration: none; font-family: 'Montserrat', sans-serif;
+      font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 8px 20px var(--brand-glow); transition: all 0.2s; z-index: 1000;
+    }
+    .fab-vk:active { transform: scale(0.95); } /* Тактильность кнопки ВК на телефоне */
+
     @media (max-width: 768px) {
-      .content-wrapper { padding: 16px; }
+      .content-wrapper { padding: 16px 16px 80px; }
       .header-section { margin-bottom: 24px; }
       .logo { width: 100px; height: 100px; margin-bottom: 16px; }
       .main-title { font-size: 34px; margin-bottom: 16px; letter-spacing: 1px; }
@@ -163,15 +178,15 @@
       .type-badge { font-size: 11px; padding: 3px 8px; border-radius: 8px; }
       .nav-btn { opacity: 1; background: rgba(0, 0, 0, 0.4); }
       .color-name { font-size: 16px; }
-      
       .lightbox-nav { width: 40px; height: 40px; font-size: 18px; }
       .lightbox-prev { left: 10px; }
       .lightbox-next { right: 10px; }
       .lightbox-close { top: 10px; right: 20px; font-size: 36px; }
       .lightbox-img { max-width: 100%; max-height: 75%; border-radius: 0; }
       .lightbox-title { bottom: 20px; font-size: 16px; width: 100%; padding: 0 16px; }
-      
-      .toast { width: 90%; font-size: 13px; padding: 14px 20px; }
+      .toast { width: 90%; font-size: 13px; padding: 14px 20px; bottom: -120px; }
+      .toast.show { bottom: 90px; }
+      .fab-vk { bottom: 20px; right: 20px; padding: 12px 20px; font-size: 14px; }
     }
   </style>
 </head>
@@ -202,7 +217,13 @@
     © 2026 Medvedev Artem 3D Studio
   </footer>
 
-  <!-- HTML каркас Лайтбокса -->
+  <a href="https://vk.com/id184420359" target="_blank" class="fab-vk">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M2.25 12C2.25 6.615 6.615 2.25 12 2.25C17.385 2.25 21.75 6.615 21.75 12C21.75 17.385 17.385 21.75 12 21.75C6.615 21.75 2.25 17.385 2.25 12ZM13.8828 14.8016C13.8828 14.8016 14.1937 14.8016 14.3976 14.6541C14.5828 14.5202 14.6062 14.2125 14.6062 14.2125C14.6062 14.2125 14.6367 13.0641 15.1102 12.9234C15.5742 12.7875 16.1742 13.9102 16.8094 14.3648C17.2922 14.7141 17.7023 14.6461 17.7023 14.6461L19.4977 14.618C19.4977 14.618 20.4352 14.557 20.0062 13.8328C19.9711 13.7719 19.6453 13.0336 18.232 11.6602C16.7578 10.2281 16.9453 10.4391 18.7242 8.04609C19.807 6.58828 20.2406 5.68828 20.0977 5.30859C19.9617 4.94531 19.1672 5.03203 19.1672 5.03203L17.1562 5.05781C17.1562 5.05781 16.9992 5.04375 16.8633 5.12344C16.732 5.20078 16.643 5.38594 16.643 5.38594C16.643 5.38594 16.3266 6.22031 15.8648 7.01484C14.8922 8.68828 14.5055 8.775 14.3438 8.66719C13.9641 8.41875 14.0578 7.66875 14.0578 7.15312C14.0578 5.53828 14.2992 4.84922 13.568 4.67344C13.3242 4.61484 13.1414 4.575 12.443 4.56562C11.5453 4.55391 10.793 4.56094 10.4 4.75781C10.1344 4.88906 9.93281 5.17734 10.0523 5.19609C10.1977 5.21953 10.5258 5.34141 10.6922 5.67656C10.9055 6.11016 10.8984 6.96797 10.8984 6.96797C10.8984 6.96797 11.1211 8.84766 10.6125 9.12422C10.2633 9.31406 9.78984 8.92266 8.82891 7.23047C8.33672 6.36094 8.03203 5.45625 8.03203 5.45625C8.03203 5.45625 7.95469 5.26641 7.81875 5.16562C7.65937 5.04844 7.44375 5.01328 7.44375 5.01328L5.53594 5.025C5.53594 5.025 5.24766 5.03437 5.13984 5.15859C5.04375 5.26875 5.13047 5.49844 5.13047 5.49844C5.13047 5.49844 6.61172 8.97188 8.28047 10.7109C9.80859 12.3023 11.4586 12.1875 11.4586 12.1875L11.5172 14.2828C11.5172 14.2828 11.4703 14.5664 11.6039 14.6859C11.7258 14.7938 11.9742 14.7891 11.9742 14.7891L13.8828 14.8016Z" fill="currentColor"/>
+    </svg>
+    Заказать печать
+  </a>
+
   <div id="lightbox" class="lightbox">
     <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
     <button class="lightbox-nav lightbox-prev" onclick="changeLightboxSlide(event, 'prev')">&#10094;</button>
@@ -211,7 +232,6 @@
     <div id="lightbox-title" class="lightbox-title"></div>
   </div>
 
-  <!-- Всплывающее уведомление для логотипа -->
   <div id="toast" class="toast">Не все сразу 😉<br>Главная страница ещё не вернулась из отпуска!</div>
 
   <script>
@@ -233,7 +253,6 @@
     const container = document.getElementById('catalog');
     const filterBtns = document.querySelectorAll('.filter-btn');
 
-    // Логика клика по логотипу (Тост уведомление)
     const logo = document.getElementById('main-logo');
     const toast = document.getElementById('toast');
     let toastTimeout;
@@ -243,10 +262,9 @@
       clearTimeout(toastTimeout);
       toastTimeout = setTimeout(() => {
         toast.classList.remove('show');
-      }, 3500); // Скрывается через 3.5 секунды
+      }, 3500); 
     });
 
-    // Логика перелистывания слайдов
     function changeSlide(carousel, direction) {
       const slides = carousel.querySelectorAll('.carousel-img');
       const dots = carousel.querySelectorAll('.dot');
@@ -287,7 +305,6 @@
       if (touchendX > touchstartX + 40) changeSlide(carousel, 'prev');
     });
 
-    // Лайтбокс логика
     let currentLightboxId = null;
     let currentImageIndex = 0;
     const lightbox = document.getElementById('lightbox');
@@ -346,17 +363,11 @@
       if (lbTouchendX > lbTouchstartX + 40) changeLightboxSlide(null, 'prev');
     });
 
-    // УПРАВЛЕНИЕ КЛАВИАТУРОЙ (ESC и Стрелки)
     document.addEventListener('keydown', function(e) {
       if (!lightbox.classList.contains('active')) return;
-      
-      if (e.key === 'Escape') {
-        closeLightbox();
-      } else if (e.key === 'ArrowRight') {
-        changeLightboxSlide(null, 'next');
-      } else if (e.key === 'ArrowLeft') {
-        changeLightboxSlide(null, 'prev');
-      }
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowRight') changeLightboxSlide(null, 'next');
+      else if (e.key === 'ArrowLeft') changeLightboxSlide(null, 'prev');
     });
 
     function renderCards(filterType) {
