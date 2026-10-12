@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Палитра материалов | Medvedev Artem</title>
   
-  <!-- Обновленное подключение шрифтов: добавлено тонкое начертание (300) для Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Forum&family=Inter:wght@400;500&family=Montserrat:wght@300;600;700&display=swap" rel="stylesheet">
@@ -25,16 +24,26 @@
     .content-wrapper { padding: 40px 40px 60px; flex-grow: 1; width: 100%; max-width: 1600px; margin: 0 auto; }
     
     .header-section { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 40px; }
-    .logo { width: 140px; height: 140px; object-fit: contain; margin-bottom: 24px; }
-    .main-title { font-family: 'Forum', serif; font-size: 52px; color: #ffffff; font-weight: 400; letter-spacing: 3px; margin-bottom: 20px; }
+    
+    /* Логотип теперь кликабельный */
+    .logo { width: 140px; height: 140px; object-fit: contain; margin-bottom: 24px; cursor: pointer; }
+    
+    .main-title { font-family: 'Forum', serif; font-size: 52px; color: #ffffff; font-weight: 400; letter-spacing: 3px; margin-bottom: 16px; }
 
+    /* Обновленный дисклеймер: без рамки, на всю ширину, прозрачный фон */
     .disclaimer {
-      font-size: 12px; line-height: 1.6; color: #777777; max-width: 650px;
-      background: rgba(255, 255, 255, 0.02); padding: 14px 20px;
-      border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 13px; 
+      line-height: 1.6; 
+      color: #777777; 
+      width: 100%; 
+      max-width: 900px; /* Легкое ограничение ширины для комфортного чтения */
+      background: transparent; 
+      border: none;
+      text-align: center;
+      margin-top: 10px;
     }
 
-    .filters { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 50px; }
+    .filters { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 50px; margin-top: 30px; }
     .filter-btn {
       display: inline-flex; align-items: center; background: transparent;
       color: #ccc; border: 1px solid #444; padding: 8px 18px 8px 22px;
@@ -60,20 +69,10 @@
     }
     .carousel-img.active { opacity: 1; z-index: 1; }
     
-    /* Обновленная плашка: тонкий шрифт (300), меньше размер, изящные отступы */
     .type-badge {
-      font-family: 'Montserrat', sans-serif; 
-      position: absolute; 
-      top: 14px; 
-      right: 14px;
-      background: rgba(20, 20, 20, 0.85); 
-      color: #ffffff; 
-      padding: 4px 10px; /* Уменьшили внутренние отступы */
-      border-radius: 12px; /* Сделали скругление аккуратнее под новый размер */
-      font-size: 12px; /* Уменьшили шрифт */
-      font-weight: 300; /* Сделали начертание тонким */
-      z-index: 3; 
-      letter-spacing: 0.5px;
+      font-family: 'Montserrat', sans-serif; position: absolute; top: 14px; right: 14px;
+      background: rgba(20, 20, 20, 0.85); color: #ffffff; padding: 4px 10px;
+      border-radius: 12px; font-size: 12px; font-weight: 300; z-index: 3; letter-spacing: 0.5px;
     }
     
     .nav-btn {
@@ -127,23 +126,41 @@
     .lightbox-next { right: 30px; }
     .lightbox-title {
       position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-      color: white; font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 600;
+      color: white; font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 600; text-align: center;
     }
+
+    /* Всплывающее уведомление (Toast) */
+    .toast {
+      position: fixed;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2a2a2a;
+      color: #fff;
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      border: 1px solid #444;
+      transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Пружинистая анимация */
+      z-index: 10000;
+      line-height: 1.5;
+    }
+    .toast.show { bottom: 40px; }
 
     @media (max-width: 768px) {
       .content-wrapper { padding: 16px; }
       .header-section { margin-bottom: 24px; }
       .logo { width: 100px; height: 100px; margin-bottom: 16px; }
       .main-title { font-size: 34px; margin-bottom: 16px; letter-spacing: 1px; }
-      .disclaimer { font-size: 11px; padding: 12px; text-align: center; }
+      .disclaimer { font-size: 12px; padding: 0 10px; }
       .filters { gap: 10px; margin-bottom: 30px; }
       .filter-btn { font-size: 13px; padding: 8px 16px; }
       .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
       .color-swatch, .carousel { height: 160px; }
-      
-      /* Еще сильнее уменьшаем плашку для мобильных */
       .type-badge { font-size: 11px; padding: 3px 8px; border-radius: 8px; }
-      
       .nav-btn { opacity: 1; background: rgba(0, 0, 0, 0.4); }
       .color-name { font-size: 16px; }
       
@@ -152,7 +169,9 @@
       .lightbox-next { right: 10px; }
       .lightbox-close { top: 10px; right: 20px; font-size: 36px; }
       .lightbox-img { max-width: 100%; max-height: 75%; border-radius: 0; }
-      .lightbox-title { bottom: 20px; font-size: 16px; text-align: center; width: 100%; padding: 0 16px; }
+      .lightbox-title { bottom: 20px; font-size: 16px; width: 100%; padding: 0 16px; }
+      
+      .toast { width: 90%; font-size: 13px; padding: 14px 20px; }
     }
   </style>
 </head>
@@ -160,7 +179,7 @@
 
   <div class="content-wrapper">
     <header class="header-section">
-      <img src="logo.png" alt="Medvedev Artem 3D Studio" class="logo" onerror="this.style.display='none'">
+      <img src="logo.png" alt="Medvedev Artem 3D Studio" class="logo" id="main-logo" onerror="this.style.display='none'">
       <h1 class="main-title">ПАЛИТРА ФИЛАМЕНТА</h1>
       <div class="disclaimer">
         На фото я старался показать товары так, как они выглядят в реальности — с честной цветопередачей и правильным освещением. Но каждый экран отображает цвета по-своему, поэтому возможны небольшие отличия между фото и реальным изделием. Если у вас есть вопросы по оттенкам — напишите мне, я помогу!
@@ -183,6 +202,7 @@
     © 2026 Medvedev Artem 3D Studio
   </footer>
 
+  <!-- HTML каркас Лайтбокса -->
   <div id="lightbox" class="lightbox">
     <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
     <button class="lightbox-nav lightbox-prev" onclick="changeLightboxSlide(event, 'prev')">&#10094;</button>
@@ -190,6 +210,9 @@
     <button class="lightbox-nav lightbox-next" onclick="changeLightboxSlide(event, 'next')">&#10095;</button>
     <div id="lightbox-title" class="lightbox-title"></div>
   </div>
+
+  <!-- Всплывающее уведомление для логотипа -->
+  <div id="toast" class="toast">Не все сразу 😉<br>Главная страница ещё не вернулась из отпуска!</div>
 
   <script>
     const filamentsData = [
@@ -210,6 +233,20 @@
     const container = document.getElementById('catalog');
     const filterBtns = document.querySelectorAll('.filter-btn');
 
+    // Логика клика по логотипу (Тост уведомление)
+    const logo = document.getElementById('main-logo');
+    const toast = document.getElementById('toast');
+    let toastTimeout;
+    
+    logo.addEventListener('click', () => {
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500); // Скрывается через 3.5 секунды
+    });
+
+    // Логика перелистывания слайдов
     function changeSlide(carousel, direction) {
       const slides = carousel.querySelectorAll('.carousel-img');
       const dots = carousel.querySelectorAll('.dot');
@@ -250,6 +287,7 @@
       if (touchendX > touchstartX + 40) changeSlide(carousel, 'prev');
     });
 
+    // Лайтбокс логика
     let currentLightboxId = null;
     let currentImageIndex = 0;
     const lightbox = document.getElementById('lightbox');
@@ -270,7 +308,7 @@
     };
 
     window.changeLightboxSlide = function(event, direction) {
-      event.stopPropagation();
+      if(event) event.stopPropagation();
       const filament = filaments.find(f => f.id === currentLightboxId);
       if (!filament || !filament.images) return;
 
@@ -304,8 +342,21 @@
     
     lightbox.addEventListener('touchend', e => {
       lbTouchendX = e.changedTouches[0].screenX;
-      if (lbTouchendX < lbTouchstartX - 40) changeLightboxSlide(e, 'next');
-      if (lbTouchendX > lbTouchstartX + 40) changeLightboxSlide(e, 'prev');
+      if (lbTouchendX < lbTouchstartX - 40) changeLightboxSlide(null, 'next');
+      if (lbTouchendX > lbTouchstartX + 40) changeLightboxSlide(null, 'prev');
+    });
+
+    // УПРАВЛЕНИЕ КЛАВИАТУРОЙ (ESC и Стрелки)
+    document.addEventListener('keydown', function(e) {
+      if (!lightbox.classList.contains('active')) return;
+      
+      if (e.key === 'Escape') {
+        closeLightbox();
+      } else if (e.key === 'ArrowRight') {
+        changeLightboxSlide(null, 'next');
+      } else if (e.key === 'ArrowLeft') {
+        changeLightboxSlide(null, 'prev');
+      }
     });
 
     function renderCards(filterType) {
