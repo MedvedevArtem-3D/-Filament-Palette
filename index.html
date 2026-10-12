@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Палитра материалов | Medvedev Artem</title>
   
+  <!-- Обновленное подключение шрифтов: добавлено тонкое начертание (300) для Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Forum&family=Inter:wght@400;500&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Forum&family=Inter:wght@400;500&family=Montserrat:wght@300;600;700&display=swap" rel="stylesheet">
   
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -52,7 +53,6 @@
     .color-swatch, .carousel { height: 240px; width: 100%; position: relative; background: #222; }
     .carousel { overflow: hidden; touch-action: pan-y; }
     
-    /* Добавлен cursor: zoom-in для подсказки, что фото кликабельно */
     .carousel-img { 
       position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
       object-fit: cover; opacity: 0; transition: opacity 0.3s ease; 
@@ -60,10 +60,20 @@
     }
     .carousel-img.active { opacity: 1; z-index: 1; }
     
+    /* Обновленная плашка: тонкий шрифт (300), меньше размер, изящные отступы */
     .type-badge {
-      font-family: 'Montserrat', sans-serif; position: absolute; top: 14px; right: 14px;
-      background: rgba(20, 20, 20, 0.85); color: #ffffff; padding: 6px 14px;
-      border-radius: 16px; font-size: 16px; font-weight: 700; z-index: 3; letter-spacing: 0.5px;
+      font-family: 'Montserrat', sans-serif; 
+      position: absolute; 
+      top: 14px; 
+      right: 14px;
+      background: rgba(20, 20, 20, 0.85); 
+      color: #ffffff; 
+      padding: 4px 10px; /* Уменьшили внутренние отступы */
+      border-radius: 12px; /* Сделали скругление аккуратнее под новый размер */
+      font-size: 12px; /* Уменьшили шрифт */
+      font-weight: 300; /* Сделали начертание тонким */
+      z-index: 3; 
+      letter-spacing: 0.5px;
     }
     
     .nav-btn {
@@ -85,13 +95,13 @@
 
     footer { text-align: center; padding: 24px; font-size: 13px; color: #666; border-top: 1px solid #333; margin-top: auto; }
 
-    /* СТИЛИ ДЛЯ ЛАЙТБОКСА (Полноэкранный просмотр) */
+    /* Лайтбокс */
     .lightbox {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.95); z-index: 9999;
       display: flex; align-items: center; justify-content: center;
       opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-      touch-action: none; /* Блокируем скролл самого сайта под фото */
+      touch-action: none;
     }
     .lightbox.active { opacity: 1; pointer-events: auto; }
     .lightbox-img {
@@ -130,11 +140,13 @@
       .filter-btn { font-size: 13px; padding: 8px 16px; }
       .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
       .color-swatch, .carousel { height: 160px; }
-      .type-badge { font-size: 14px; padding: 4px 10px; }
+      
+      /* Еще сильнее уменьшаем плашку для мобильных */
+      .type-badge { font-size: 11px; padding: 3px 8px; border-radius: 8px; }
+      
       .nav-btn { opacity: 1; background: rgba(0, 0, 0, 0.4); }
       .color-name { font-size: 16px; }
       
-      /* Адаптация лайтбокса для телефона */
       .lightbox-nav { width: 40px; height: 40px; font-size: 18px; }
       .lightbox-prev { left: 10px; }
       .lightbox-next { right: 10px; }
@@ -171,7 +183,6 @@
     © 2026 Medvedev Artem 3D Studio
   </footer>
 
-  <!-- HTML каркас Лайтбокса -->
   <div id="lightbox" class="lightbox">
     <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
     <button class="lightbox-nav lightbox-prev" onclick="changeLightboxSlide(event, 'prev')">&#10094;</button>
@@ -181,7 +192,6 @@
   </div>
 
   <script>
-    // Исходные данные. Добавлено поле id для точного определения карточки при открытии фото.
     const filamentsData = [
       { type: "PLA", name: "Синий темный", images: ["blue_1.jpg", "blue_2.jpg"], hex: "#061D62" },  
       { type: "PETG", name: "Оранжевый", images: ["orange_1.jpg", "orange_2.jpg", "orange_3.jpg"], hex: "#ff6600" },
@@ -196,13 +206,10 @@
       { type: "PLA", name: "Слоновая кость", hex: "#EBE7DB" },
     ];
 
-    // Присваиваем каждому элементу уникальный ID
     const filaments = filamentsData.map((item, index) => ({ ...item, id: index }));
-
     const container = document.getElementById('catalog');
     const filterBtns = document.querySelectorAll('.filter-btn');
 
-    // Логика карточек (внутри сетки)
     function changeSlide(carousel, direction) {
       const slides = carousel.querySelectorAll('.carousel-img');
       const dots = carousel.querySelectorAll('.dot');
@@ -223,12 +230,11 @@
     }
 
     window.switchSlide = function(event, direction, btn) {
-      event.stopPropagation(); // Блокируем всплытие, чтобы не открывался лайтбокс при клике на стрелку
+      event.stopPropagation(); 
       const carousel = btn.closest('.carousel');
       changeSlide(carousel, direction);
     };
 
-    // СВАЙПЫ ДЛЯ КАРТОЧЕК
     let touchstartX = 0; let touchendX = 0;
     container.addEventListener('touchstart', e => {
       const carousel = e.target.closest('.carousel');
@@ -244,7 +250,6 @@
       if (touchendX > touchstartX + 40) changeSlide(carousel, 'prev');
     });
 
-    // ЛОГИКА ЛАЙТБОКСА
     let currentLightboxId = null;
     let currentImageIndex = 0;
     const lightbox = document.getElementById('lightbox');
@@ -256,12 +261,12 @@
       currentImageIndex = imgIndex;
       updateLightboxImage();
       lightbox.classList.add('active');
-      document.body.style.overflow = 'hidden'; // Убираем скролл сайта
+      document.body.style.overflow = 'hidden'; 
     };
 
     window.closeLightbox = function() {
       lightbox.classList.remove('active');
-      document.body.style.overflow = ''; // Возвращаем скролл
+      document.body.style.overflow = ''; 
     };
 
     window.changeLightboxSlide = function(event, direction) {
@@ -283,18 +288,15 @@
         lightboxImg.src = filament.images[currentImageIndex];
         lightboxTitle.innerText = `${filament.type} — ${filament.name}`;
         
-        // Прячем стрелки, если фото всего одно
         const navBtns = lightbox.querySelectorAll('.lightbox-nav');
         navBtns.forEach(btn => btn.style.display = filament.images.length > 1 ? 'flex' : 'none');
       }
     }
 
-    // Закрытие лайтбокса при клике на пустой фон
     lightbox.addEventListener('click', function(e) {
       if (e.target === lightbox) closeLightbox();
     });
 
-    // Свайпы для лайтбокса на телефонах
     let lbTouchstartX = 0; let lbTouchendX = 0;
     lightbox.addEventListener('touchstart', e => {
       lbTouchstartX = e.changedTouches[0].screenX;
@@ -306,7 +308,6 @@
       if (lbTouchendX > lbTouchstartX + 40) changeLightboxSlide(e, 'prev');
     });
 
-    // Отрисовка
     function renderCards(filterType) {
       container.innerHTML = ''; 
       const filtered = filterType === 'all' ? filaments : filaments.filter(f => f.type === filterType);
@@ -316,7 +317,6 @@
         const badgeHTML = `<div class="type-badge">${f.type}</div>`;
 
         if (f.images && f.images.length > 0) {
-          // На картинку повешен onclick для вызова лайтбокса
           const imgsHTML = f.images.map((img, i) => 
             `<img src="${img}" class="carousel-img ${i === 0 ? 'active' : ''}" loading="lazy" onclick="openLightbox(${f.id}, ${i})">`
           ).join('');
