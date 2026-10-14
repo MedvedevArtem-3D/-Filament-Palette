@@ -245,10 +245,13 @@
       object-fit: cover; 
       opacity: 0; 
       pointer-events: none; /* Исправляет баг с открытием неактивной картинки */
-      transition: opacity 0.3s ease; 
+      transition: opacity 0.25s ease; 
       user-select: none; 
       -webkit-user-drag: none; 
       cursor: zoom-in;
+      will-change: opacity;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
     .carousel-img.active { 
       opacity: 1; 
@@ -641,6 +644,13 @@
       const dots = carousel.querySelectorAll('.dot');
       if (slides.length <= 1) return;
 
+      // Принудительно подгружаем слайд, если он был отложен для экономии памяти
+      const targetSlide = slides[newIndex];
+      if (targetSlide && targetSlide.dataset.src) {
+        targetSlide.src = targetSlide.dataset.src;
+        delete targetSlide.dataset.src;
+      }
+
       slides.forEach((s, idx) => s.classList.toggle('active', idx === newIndex));
       dots.forEach((d, idx) => d.classList.toggle('active', idx === newIndex));
     }
@@ -915,7 +925,24 @@
       imgElement.style.display = 'none';
     };
 
-    // Рендеринг карточек (оптимизировано через единую сборку строки)
+    // Фоновая предзагрузка вторых слайдов после того, как загрузились основные карточки
+    let preloadTimeout;
+    function scheduleSecondarySlidesPreload() {
+      clearTimeout(preloadTimeout);
+      preloadTimeout = setTimeout(() => {
+        const deferredImgs = container.querySelectorAll('img[data-src]');
+        deferredImgs.forEach((img, idx) => {
+          setTimeout(() => {
+            if (img.dataset.src) {
+              img.src = img.dataset.src;
+              delete img.dataset.src;
+            }
+          }, idx * 80); // Плавная поочередная подгрузка без перегрузки процессора iPhone
+        });
+      }, 600);
+    }
+
+    // Рендеринг карточек (оптимизировано для быстрой загрузки на iOS / Android)
     function renderCards() {
       const query = currentSearch.trim().toLowerCase();
       
@@ -933,14 +960,24 @@
         return;
       }
 
-      const cardsHTML = filtered.map(f => {
+      const cardsHTML = filtered.map((f, cardIndex) => {
         let visualHTML = '';
         const badgeHTML = `<div class="type-badge">${f.type}</div>`;
 
         if (f.images && f.images.length > 0) {
-          const imgsHTML = f.images.map((img, i) => 
-            `<img src="${img}" alt="${f.type} ${f.name} — фото ${i + 1}" class="carousel-img ${i === 0 ? 'active' : ''}" loading="lazy" onclick="openLightbox(${f.id}, ${i})" onerror="handleImgError(this)">`
-          ).join('');
+          // Первые 6 карточек на экране грузим мгновенно с высоким приоритетом, остальные — лениво
+          const isAboveTheFold = cardIndex < 6;
+
+          const imgsHTML = f.images.map((img, i) => {
+            const encodedUrl = encodeURI(img);
+            if (i === 0) {
+              const loadingAttr = isAboveTheFold ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
+              return `<img src="${encodedUrl}" alt="${f.type} ${f.name} — фото 1" class="carousel-img active" ${loadingAttr} decoding="async" onclick="openLightbox(${f.id}, 0)" onerror="handleImgError(this)">`;
+            } else {
+              // Вторые фото не грузим в одну секунду с первыми, чтобы не забивать канал и память2K-декодированием
+              return `<img data-src="${encodedUrl}" alt="${f.type} ${f.name} — фото ${i + 1}" class="carousel-img" decoding="async" onclick="openLightbox(${f.id}, ${i})" onerror="handleImgError(this)">`;
+            }
+          }).join('');
           
           let navHTML = '';
           if (f.images.length > 1) {
@@ -968,6 +1005,7 @@
       }).join('');
 
       container.innerHTML = cardsHTML;
+      scheduleSecondarySlidesPreload();
     }
 
     function updateCounts() {
