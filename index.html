@@ -327,22 +327,14 @@
       padding: 18px 20px; 
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+      justify-content: center;
+      text-align: center;
     }
     .color-name { 
       color: #ffffff; 
       font-size: 17px; 
       font-weight: 500; 
       margin: 0; 
-    }
-    .color-dot-preview {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
     }
 
     .empty-grid-msg {
@@ -382,6 +374,7 @@
       transition: opacity 0.3s ease; 
       touch-action: none;
       backdrop-filter: blur(4px);
+      overflow: hidden;
     }
     .lightbox.active { opacity: 1; pointer-events: auto; }
     .lightbox-img { 
@@ -392,6 +385,14 @@
       user-select: none; 
       -webkit-user-drag: none; 
       box-shadow: 0 10px 35px rgba(0,0,0,0.6); 
+      transform-origin: center center;
+      transition: transform 0.2s ease-out;
+      will-change: transform;
+      cursor: grab;
+    }
+    .lightbox-img.dragging {
+      transition: none;
+      cursor: grabbing;
     }
     .lightbox-close { 
       position: absolute; 
@@ -514,8 +515,7 @@
       .nav-btn.left { left: 6px; }
       .nav-btn.right { right: 6px; }
       .info { padding: 12px 14px; }
-      .color-name { font-size: 14px; }
-      .color-dot-preview { width: 14px; height: 14px; }
+      .color-name { font-size: 15px; }
       .lightbox-nav { width: 42px; height: 42px; font-size: 18px; }
       .lightbox-prev { left: 10px; }
       .lightbox-next { right: 10px; }
@@ -555,7 +555,7 @@
       </div>
     </div>
     
-    <div id="filter-description" class="filter-description">
+    <div id="filter-description" class="filter-description" aria-live="polite">
       Показана вся палитра. Выберите конкретный материал, чтобы узнать о его свойствах и применении.
     </div>
 
@@ -563,17 +563,16 @@
   </div>
 
   <footer>
-    © <span id="current-year">2026</span> Medvedev Artem 3D Studio
+    © 2026 Medvedev Artem 3D Studio
   </footer>
 
-  <!-- Добавлен rel="noopener noreferrer" для безопасности -->
   <a href="https://vk.com/id184420359" target="_blank" rel="noopener noreferrer" class="fab-vk">Заказать печать</a>
 
   <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр фотографии">
-    <button class="lightbox-close" onclick="closeLightbox()" aria-label="Закрыть">&times;</button>
-    <button class="lightbox-nav lightbox-prev" onclick="changeLightboxSlide(event, 'prev')" aria-label="Предыдущее фото">&#10094;</button>
+    <button class="lightbox-close" aria-label="Закрыть" onclick="closeLightbox()">&times;</button>
+    <button class="lightbox-nav lightbox-prev" aria-label="Предыдущее фото" onclick="changeLightboxSlide(event, 'prev')">&#10094;</button>
     <img id="lightbox-img" class="lightbox-img" src="" alt="" onclick="event.stopPropagation()">
-    <button class="lightbox-nav lightbox-next" onclick="changeLightboxSlide(event, 'next')" aria-label="Следующее фото">&#10095;</button>
+    <button class="lightbox-nav lightbox-next" aria-label="Следующее фото" onclick="changeLightboxSlide(event, 'next')">&#10095;</button>
     <div class="lightbox-footer">
       <div id="lightbox-title" class="lightbox-title"></div>
       <div id="lightbox-counter" class="lightbox-counter"></div>
@@ -583,6 +582,11 @@
   <div id="toast" class="toast" role="status" aria-live="polite">Не все сразу 😉<br>Главная страница ещё не вернулась из отпуска!</div>
 
   <script>
+    // Функция обработки ошибок загрузки фото (объявлена в начале скрипта)
+    window.handleImgError = function(imgElement) {
+      imgElement.style.display = 'none';
+    };
+
     const filamentsData = [
       { type: "PLA", name: "Синий темный", images: ["Синий_темный_1.jpg", "Синий_темный_2.jpg"], hex: "#061D62" },  
       { type: "PETG", name: "Синий", images: ["Синий_1.jpg", "Синий_2.jpg"], hex: "#144FC7" }, 
@@ -594,7 +598,7 @@
       { type: "PETG", name: "Желтый", images: ["Желтый_1.jpg", "Желтый_2.jpg"], hex: "#F3CE2A" },
       { type: "PETG", name: "Зеленый", images: ["Зеленый_1.jpg", "Зеленый_2.jpg"], hex: "#3BA010" },
       { type: "PETG", name: "Зеленый темный", images: ["Зеленый_темный_1.jpg", "Зеленый_темный_2.jpg"], hex: "#314B03" },
-      { type: "PETG-CF", name: "Черный (карбон)", images: ["Черный(карбон)_1.jpg", "Черный(карбон)_2.jpg"], hex: "#272626" },
+      { type: "PETG-CF", name: "Черный(карбон)", images: ["Черный(карбон)_1.jpg", "Черный(карбон)_2.jpg"], hex: "#272626" },
       { type: "TPU", name: "Черный", images: ["ЧерныйTPU_1.jpg", "ЧерныйTPU_2.jpg"], hex: "#000000" },
       { type: "PETG", name: "Черный", images: ["Черный_1.jpg", "Черный_2.jpg"], hex: "#000000" },
       { type: "PETG", name: "Белый", images: ["Белый_1.jpg", "Белый_2.jpg"], hex: "#ffffff" },
@@ -603,11 +607,11 @@
 
     const filterDescriptions = {
       "all": "Показана вся палитра. Выберите конкретный материал, чтобы узнать о его свойствах и применении.",
-      "PLA": "Самый простой и экологичный материал. Хорош для декоративных изделий, макетов, прототипов и деталей без высоких температурных нагрузок.",
-      "PETG": "Прочный и в меру гибкий пластик. Идеален для функциональных деталей, которые должны выдерживать нагрузку и удары. Подходит для улицы и помещений.",
-      "PETG-CF": "PETG с добавлением углеволокна. Повышенная жесткость, матовая шагреневая текстура и высокая прочность при меньшем весе. Отлично подходит для технических деталей.",
-      "TPU": "Гибкий резиноподобный пластик (эластомер). Для амортизаторов, прокладок, ножек, защитных чехлов и всего, что должно гнуться и возвращать форму.",
-      "ABS": "Пока что он тоже в отпуске, но обещал вернуться, когда я куплю для него подходящий принтер с закрытой камерой! 😉"
+      "PLA": "Самый простой материал. Хорош для декоративных изделий, прототипов и деталей без высоких температурных нагрузок.",
+      "PETG": "Прочный и гибкий пластик. Идеален для функциональных деталей, которые должны выдерживать нагрузку и удары. Подходит для улицы и помещений.",
+      "PETG-CF": "PETG с добавлением углеволокна. Повышенная жесткость и прочность при меньшем весе. Отлично подходит для технических деталей с высокой нагрузкой.",
+      "TPU": "Гибкий резиноподобный пластик. Для амортизаторов, прокладок, чехлов и всего, что должно гнуться и возвращать форму.",
+      "ABS": "Пока что он тоже в отпуске, но обещал вернуться, когда я куплю для него подходящий принтер! 😉"
     };
 
     const filaments = filamentsData.map((item, index) => ({ ...item, id: index }));
@@ -620,12 +624,6 @@
     let currentFilter = 'all';
     let currentSearch = '';
 
-    // Автообновление года в футере (не меньше 2026)
-    const yearSpan = document.getElementById('current-year');
-    const currentYear = new Date().getFullYear();
-    if (currentYear > 2026) yearSpan.textContent = currentYear;
-
-    // Пасхалка на логотипе
     const logo = document.getElementById('main-logo');
     const toast = document.getElementById('toast');
     let toastTimeout;
@@ -638,14 +636,13 @@
       }, 3500); 
     });
 
-    // Переключение слайдов внутри карточки
-    function setSlideIndex(carousel, targetIndex) {
+    function setSlide(carousel, newIndex) {
       const slides = carousel.querySelectorAll('.carousel-img');
       const dots = carousel.querySelectorAll('.dot');
       if (slides.length <= 1) return;
 
-      slides.forEach((slide, i) => slide.classList.toggle('active', i === targetIndex));
-      dots.forEach((dot, i) => dot.classList.toggle('active', i === targetIndex));
+      slides.forEach((s, idx) => s.classList.toggle('active', idx === newIndex));
+      dots.forEach((d, idx) => d.classList.toggle('active', idx === newIndex));
     }
 
     function changeSlide(carousel, direction) {
@@ -660,8 +657,7 @@
       } else {
         activeIndex = (activeIndex - 1 + slides.length) % slides.length;
       }
-      
-      setSlideIndex(carousel, activeIndex);
+      setSlide(carousel, activeIndex);
     }
 
     window.switchSlide = function(event, direction, btn) {
@@ -670,15 +666,15 @@
       changeSlide(carousel, direction);
     };
 
-    window.goToSlide = function(event, index, dotElement) {
+    window.goToSlide = function(event, index, dot) {
       event.stopPropagation();
-      const carousel = dotElement.closest('.carousel');
-      setSlideIndex(carousel, index);
+      const carousel = dot.closest('.carousel');
+      setSlide(carousel, index);
     };
 
-    // Свайпы на карточках с защитой от вертикального скролла
-    let touchstartX = 0; 
+    let touchstartX = 0;
     let touchstartY = 0;
+
     container.addEventListener('touchstart', e => {
       const carousel = e.target.closest('.carousel');
       if (!carousel) return;
@@ -691,18 +687,16 @@
       if (!carousel) return;
       const touchendX = e.changedTouches[0].screenX;
       const touchendY = e.changedTouches[0].screenY;
-      
       const diffX = touchendX - touchstartX;
       const diffY = touchendY - touchstartY;
 
-      // Срабатывает только если горизонтальный свайп длиннее вертикального (пользователь не скроллит страницу)
       if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
         if (diffX < 0) changeSlide(carousel, 'next');
         else changeSlide(carousel, 'prev');
       }
     }, {passive: true});
 
-    // Логика Лайтбокса
+    // Логика Лайтбокса, зума и системного жеста «Назад»
     let currentLightboxId = null;
     let currentImageIndex = 0;
     const lightbox = document.getElementById('lightbox');
@@ -710,24 +704,68 @@
     const lightboxTitle = document.getElementById('lightbox-title');
     const lightboxCounter = document.getElementById('lightbox-counter');
 
+    // Переменные состояния зума и перемещения
+    let scale = 1;
+    let pointX = 0;
+    let pointY = 0;
+    let startX = 0;
+    let startY = 0;
+    let isPanning = false;
+    let initialPinchDistance = null;
+    let initialScale = 1;
+    let lastTapTime = 0;
+
+    function resetZoom() {
+      scale = 1;
+      pointX = 0;
+      pointY = 0;
+      lightboxImg.classList.remove('dragging');
+      updateTransform();
+    }
+
+    function updateTransform() {
+      lightboxImg.style.transform = `translate3d(${pointX}px, ${pointY}px, 0) scale(${scale})`;
+    }
+
     window.openLightbox = function(id, imgIndex) {
       currentLightboxId = id;
       currentImageIndex = imgIndex;
+      resetZoom();
       updateLightboxImage();
       lightbox.classList.add('active');
       document.body.style.overflow = 'hidden'; 
+
+      // Добавляем состояние в историю браузера, чтобы жест «Назад» на Android/iOS закрывал фото, а не страницу
+      if (!history.state || !history.state.lightboxOpen) {
+        history.pushState({ lightboxOpen: true }, '');
+      }
     };
 
-    window.closeLightbox = function() {
+    window.closeLightbox = function(fromPopState = false) {
+      if (!lightbox.classList.contains('active')) return;
       lightbox.classList.remove('active');
       document.body.style.overflow = ''; 
+      setTimeout(resetZoom, 300);
+
+      // Если закрыли крестиком или кликом по фону — убираем запись из истории
+      if (!fromPopState && history.state && history.state.lightboxOpen) {
+        history.back();
+      }
     };
+
+    // Перехват системного жеста «Назад» (свайп от края экрана на телефонах)
+    window.addEventListener('popstate', () => {
+      if (lightbox.classList.contains('active')) {
+        closeLightbox(true);
+      }
+    });
 
     window.changeLightboxSlide = function(event, direction) {
       if (event) event.stopPropagation();
       const filament = filaments.find(f => f.id === currentLightboxId);
       if (!filament || !filament.images || filament.images.length <= 1) return;
 
+      resetZoom();
       if (direction === 'next') {
         currentImageIndex = (currentImageIndex + 1) % filament.images.length;
       } else {
@@ -753,16 +791,117 @@
       if (e.target === lightbox) closeLightbox();
     });
 
+    // Поддержка щипка двумя пальцами (Pinch-to-Zoom), двойного тапа, панорамирования и свайпов
     let lbTouchstartX = 0;
+    let lbTouchstartY = 0;
+
+    function getTouchDistance(touches) {
+      return Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+    }
+
     lightbox.addEventListener('touchstart', e => {
-      lbTouchstartX = e.changedTouches[0].screenX;
-    }, {passive: true});
+      if (e.touches.length === 2) {
+        // Начало зума двумя пальцами
+        isPanning = false;
+        initialPinchDistance = getTouchDistance(e.touches);
+        initialScale = scale;
+        lightboxImg.classList.add('dragging');
+      } else if (e.touches.length === 1) {
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - lastTapTime;
+        
+        // Двойной тап по картинке для быстрого приближения/отдаления
+        if (tapLength < 300 && tapLength > 0 && e.target === lightboxImg) {
+          e.preventDefault();
+          if (scale > 1) {
+            resetZoom();
+          } else {
+            scale = 2.5;
+            updateTransform();
+          }
+          lastTapTime = 0;
+          return;
+        }
+        lastTapTime = currentTime;
+
+        if (scale > 1) {
+          // Если фото приближено — двигаем его пальцем
+          isPanning = true;
+          startX = e.touches[0].clientX - pointX;
+          startY = e.touches[0].clientY - pointY;
+          lightboxImg.classList.add('dragging');
+        } else {
+          // Если масштаб 1x — запоминаем координаты для переключения слайда или закрытия свайпом
+          lbTouchstartX = e.touches[0].screenX;
+          lbTouchstartY = e.touches[0].screenY;
+        }
+      }
+    }, {passive: false});
+
+    lightbox.addEventListener('touchmove', e => {
+      if (!lightbox.classList.contains('active')) return;
+
+      if (e.touches.length === 2 && initialPinchDistance) {
+        e.preventDefault();
+        const currentDistance = getTouchDistance(e.touches);
+        scale = Math.min(Math.max(1, initialScale * (currentDistance / initialPinchDistance)), 4);
+        if (scale === 1) {
+          pointX = 0;
+          pointY = 0;
+        }
+        updateTransform();
+      } else if (e.touches.length === 1 && isPanning && scale > 1) {
+        e.preventDefault();
+        pointX = e.touches[0].clientX - startX;
+        pointY = e.touches[0].clientY - startY;
+        updateTransform();
+      }
+    }, {passive: false});
     
     lightbox.addEventListener('touchend', e => {
-      const lbTouchendX = e.changedTouches[0].screenX;
-      if (lbTouchendX < lbTouchstartX - 40) changeLightboxSlide(null, 'next');
-      if (lbTouchendX > lbTouchstartX + 40) changeLightboxSlide(null, 'prev');
-    }, {passive: true});
+      if (e.touches.length < 2) {
+        initialPinchDistance = null;
+      }
+      if (e.touches.length === 0) {
+        lightboxImg.classList.remove('dragging');
+        if (scale <= 1.05) {
+          resetZoom();
+        }
+
+        // Если фото не увеличено, обрабатываем свайп влево/вправо (слайды) или вниз (закрытие)
+        if (!isPanning && scale === 1 && e.changedTouches.length > 0) {
+          const lbTouchendX = e.changedTouches[0].screenX;
+          const lbTouchendY = e.changedTouches[0].screenY;
+          const diffX = lbTouchendX - lbTouchstartX;
+          const diffY = lbTouchendY - lbTouchstartY;
+
+          if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 45) {
+            if (diffX < 0) changeLightboxSlide(null, 'next');
+            else changeLightboxSlide(null, 'prev');
+          } else if (Math.abs(diffY) > 80 && Math.abs(diffY) > Math.abs(diffX)) {
+            // Свайп вверх или вниз также закрывает фото (как в галерее телефона)
+            closeLightbox();
+          }
+        }
+        isPanning = false;
+      }
+    });
+
+    // Поддержка зума колесиком мыши на ПК
+    lightbox.addEventListener('wheel', e => {
+      if (!lightbox.classList.contains('active')) return;
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? 0.25 : -0.25;
+      scale = Math.min(Math.max(1, scale + delta), 4);
+      if (scale === 1) {
+        pointX = 0;
+        pointY = 0;
+      }
+      updateTransform();
+    }, {passive: false});
 
     document.addEventListener('keydown', function(e) {
       if (!lightbox.classList.contains('active')) return;
@@ -824,7 +963,6 @@
             ${visualHTML}
             <div class="info">
               <h2 class="color-name">${f.name}</h2>
-              <span class="color-dot-preview" style="background-color: ${f.hex}" title="Ориентировочный оттенок: ${f.hex}"></span>
             </div>
           </article>`;
       }).join('');
