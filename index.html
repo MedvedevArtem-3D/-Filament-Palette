@@ -249,7 +249,6 @@
       touch-action: pan-y; 
     }
     
-    /* Плавный переход в цвет HEX, если фото не загрузилось или еще грузится */
     .carousel-img { 
       position: absolute; 
       top: 0; 
@@ -258,14 +257,11 @@
       height: 100%; 
       object-fit: cover; 
       opacity: 0; 
-      pointer-events: none; /* Исправляет баг с открытием неактивной картинки */
-      transition: opacity 0.25s ease; 
+      pointer-events: none;
+      transition: opacity 0.2s ease; 
       user-select: none; 
       -webkit-user-drag: none; 
       cursor: zoom-in;
-      will-change: opacity;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
     }
     .carousel-img.active { 
       opacity: 1; 
@@ -603,7 +599,7 @@
   <div id="toast" class="toast" role="status" aria-live="polite">Не все сразу 😉<br>Главная страница ещё не вернулась из отпуска!</div>
 
   <script>
-    // Функция обработки ошибок загрузки фото (объявлена в начале скрипта)
+    // Если фото не найдено на сервере — прячем битую иконку и оставляем HEX-цвет
     window.handleImgError = function(imgElement) {
       imgElement.style.display = 'none';
     };
@@ -661,13 +657,6 @@
       const slides = carousel.querySelectorAll('.carousel-img');
       const dots = carousel.querySelectorAll('.dot');
       if (slides.length <= 1) return;
-
-      // Принудительно подгружаем слайд, если он был отложен для экономии памяти
-      const targetSlide = slides[newIndex];
-      if (targetSlide && targetSlide.dataset.src) {
-        targetSlide.src = targetSlide.dataset.src;
-        delete targetSlide.dataset.src;
-      }
 
       slides.forEach((s, idx) => s.classList.toggle('active', idx === newIndex));
       dots.forEach((d, idx) => d.classList.toggle('active', idx === newIndex));
@@ -805,7 +794,7 @@
     function updateLightboxImage() {
       const filament = filaments.find(f => f.id === currentLightboxId);
       if (filament && filament.images) {
-        lightboxImg.src = filament.images[currentImageIndex];
+        lightboxImg.src = encodeURI(filament.images[currentImageIndex]);
         lightboxImg.alt = `${filament.type} — ${filament.name}`;
         lightboxTitle.innerText = `${filament.type} — ${filament.name}`;
         lightboxCounter.innerText = filament.images.length > 1 ? `Фото ${currentImageIndex + 1} из ${filament.images.length}` : '';
@@ -938,62 +927,20 @@
       else if (e.key === 'ArrowLeft') changeLightboxSlide(null, 'prev');
     });
 
-    // Обработка ошибки загрузки фотографии (показываем HEX-цвет вместо битой иконки)
-    window.handleImgError = function(imgElement) {
-      imgElement.style.display = 'none';
-    };
-
-    // Фоновая предзагрузка вторых слайдов после того, как загрузились основные карточки
-    let preloadTimeout;
-    function scheduleSecondarySlidesPreload() {
-      clearTimeout(preloadTimeout);
-      preloadTimeout = setTimeout(() => {
-        const deferredImgs = container.querySelectorAll('img[data-src]');
-        deferredImgs.forEach((img, idx) => {
-          setTimeout(() => {
-            if (img.dataset.src) {
-              img.src = img.dataset.src;
-              delete img.dataset.src;
-            }
-          }, idx * 80); // Плавная поочередная подгрузка без перегрузки процессора iPhone
-        });
-      }, 600);
-    }
-
-    // Рендеринг карточек (оптимизировано для быстрой загрузки на iOS / Android)
-    function renderCards() {
-      const query = currentSearch.trim().toLowerCase();
-      
-      const filtered = filaments.filter(f => {
-        const matchesType = currentFilter === 'all' || f.type === currentFilter;
-        const matchesSearch = !query || f.name.toLowerCase().includes(query) || f.type.toLowerCase().includes(query);
-        return matchesType && matchesSearch;
-      });
-
-      if (filtered.length === 0) {
-        const emptyText = query 
-          ? `По запросу «${currentSearch}» ничего не найдено.` 
-          : `Материалов этого типа пока нет в палитре.`;
-        container.innerHTML = `<div class="empty-grid-msg">${emptyText}</div>`;
-        return;
-      }
-
-      const cardsHTML = filtered.map((f, cardIndex) => {
+    // Создаем карточки один раз при загрузке страницы, чтобы первые фото грузились и отображались мгновенно
+    function initCatalog() {
+      const cardsHTML = filaments.map((f) => {
         let visualHTML = '';
         const badgeHTML = `<div class="type-badge">${f.type}</div>`;
 
         if (f.images && f.images.length > 0) {
-          // Первые 6 карточек на экране грузим мгновенно с высоким приоритетом, остальные — лениво
-          const isAboveTheFold = cardIndex < 6;
-
           const imgsHTML = f.images.map((img, i) => {
-            const encodedUrl = encodeURI(img);
             if (i === 0) {
-              const loadingAttr = isAboveTheFold ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
-              return `<img src="${encodedUrl}" alt="${f.type} ${f.name} — фото 1" class="carousel-img active" ${loadingAttr} decoding="async" onclick="openLightbox(${f.id}, 0)" onerror="handleImgError(this)">`;
+              // Первое фото грузится и отображается сразу же безо всяких задержек
+              return `<img src="${img}" alt="${f.type} ${f.name} — фото 1" class="carousel-img active" loading="eager" fetchpriority="high" onclick="openLightbox(${f.id}, 0)" onerror="handleImgError(this)">`;
             } else {
-              // Вторые фото не грузим в одну секунду с первыми, чтобы не забивать канал и память2K-декодированием
-              return `<img data-src="${encodedUrl}" alt="${f.type} ${f.name} — фото ${i + 1}" class="carousel-img" decoding="async" onclick="openLightbox(${f.id}, ${i})" onerror="handleImgError(this)">`;
+              // Второе фото грузится автоматически в стандартном режиме
+              return `<img src="${img}" alt="${f.type} ${f.name} — фото ${i + 1}" class="carousel-img" loading="lazy" onclick="openLightbox(${f.id}, ${i})" onerror="handleImgError(this)">`;
             }
           }).join('');
           
@@ -1007,14 +954,13 @@
               </div>
             `;
           }
-          // Подложка цвета HEX на случай, если фото еще грузится или отсутствует
           visualHTML = `<div class="carousel" style="background-color: ${f.hex}">${badgeHTML}${imgsHTML}${navHTML}</div>`;
         } else {
           visualHTML = `<div class="color-swatch" style="background-color: ${f.hex}">${badgeHTML}</div>`;
         }
         
         return `
-          <article class="card">
+          <article class="card" data-type="${f.type}" data-name="${f.name.toLowerCase()}">
             ${visualHTML}
             <div class="info">
               <h2 class="color-name">${f.name}</h2>
@@ -1022,8 +968,38 @@
           </article>`;
       }).join('');
 
-      container.innerHTML = cardsHTML;
-      scheduleSecondarySlidesPreload();
+      container.innerHTML = cardsHTML + `<div id="empty-msg" class="empty-grid-msg" style="display: none;"></div>`;
+    }
+
+    // Мгновенная фильтрация без пересоздания HTML и перезагрузки картинок
+    function filterCards() {
+      const query = currentSearch.trim().toLowerCase();
+      const cards = container.querySelectorAll('.card');
+      const emptyMsg = document.getElementById('empty-msg');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const type = card.getAttribute('data-type');
+        const name = card.getAttribute('data-name');
+        const matchesType = currentFilter === 'all' || type === currentFilter;
+        const matchesSearch = !query || name.includes(query) || type.toLowerCase().includes(query);
+
+        if (matchesType && matchesSearch) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (visibleCount === 0) {
+        emptyMsg.style.display = 'block';
+        emptyMsg.innerText = query 
+          ? `По запросу «${currentSearch}» ничего не найдено.` 
+          : `Материалов этого типа пока нет в палитре.`;
+      } else {
+        emptyMsg.style.display = 'none';
+      }
     }
 
     function updateCounts() {
@@ -1049,7 +1025,7 @@
           descElement.style.opacity = 1;
         }, 150);
         
-        renderCards();
+        filterCards();
       });
     });
 
@@ -1057,7 +1033,7 @@
     searchInput.addEventListener('input', (e) => {
       currentSearch = e.target.value;
       searchClear.classList.toggle('visible', currentSearch.length > 0);
-      renderCards();
+      filterCards();
     });
 
     searchClear.addEventListener('click', () => {
@@ -1065,11 +1041,11 @@
       currentSearch = '';
       searchClear.classList.remove('visible');
       searchInput.focus();
-      renderCards();
+      filterCards();
     });
 
     updateCounts();
-    renderCards();
+    initCatalog();
   </script>
 </body>
 </html>
