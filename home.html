@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MA/ED | 3D-печать и моделирование</title>
+  
+  <!-- Подключение фирменных шрифтов -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Forum&family=Inter:wght@400;500&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Переменные из вашего Брендбука */
+    :root {
+      --bg-dark: #121212;
+      --graphite: #1E1E1E;
+      --text-white: #FFFFFF;
+      --text-gray: #AAAAAA;
+      --accent-cream: #F4F0EB;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+      font-family: 'Inter', system-ui, sans-serif; 
+      background: var(--bg-dark); 
+      color: var(--text-white); 
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    /* Шапка сайта (Навигация) */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+      border-bottom: 1px solid #333;
+    }
+    .logo-img { width: 60px; height: 60px; object-fit: contain; }
+    
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a {
+      color: var(--text-white);
+      text-decoration: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-gray); }
+    
+    /* Кнопка "Заказать расчет" */
+    .cta-button {
+      background: transparent;
+      color: var(--text-white);
+      border: 1px solid var(--text-white);
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .cta-button:hover { background: var(--text-white); color: var(--bg-dark); }
+
+    /* Главный экран (Hero Section) */
+    .hero {
+      text-align: center;
+      padding: 80px 20px 60px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-family: 'Forum', serif;
+      font-size: 56px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: 18px;
+      color: var(--text-gray);
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+
+    /* Секция сторителлинга (Шахматный порядок "Паспарту") */
+    .story-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+    
+    .story-block {
+      display: flex;
+      align-items: center;
+      margin-bottom: 100px;
+      gap: 60px;
+    }
+    /* Шахматный порядок: четные блоки меняют направление */
+    .story-block:nth-child(even) { flex-direction: row-reverse; }
+
+    /* Оформление фото в стиле "Паспарту" */
+    .story-photo-wrapper {
+      flex: 1;
+      background: var(--graphite);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      position: relative;
+    }
+    .story-photo {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: var(--accent-cream); /* Кремовый фон для предметных фото */
+    }
+    
+    /* Текстовый блок сторителлинга */
+    .story-text {
+      flex: 1;
+      padding: 20px;
+    }
+    .story-text h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+    .story-text p {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      font-size: 13px;
+      color: #666;
+      border-top: 1px solid #333;
+    }
+
+    /* Адаптация под телефоны */
+    @media (max-width: 768px) {
+      .navbar { flex-direction: column; gap: 20px; padding: 20px; }
+      .nav-links { flex-wrap: wrap; justify-content: center; gap: 15px; }
+      .hero { padding: 40px 16px; }
+      .hero h1 { font-size: 36px; }
+      .hero p { font-size: 15px; }
+      
+      .story-block, .story-block:nth-child(even) {
+        flex-direction: column;
+        gap: 30px;
+        margin-bottom: 60px;
+      }
+      .story-photo { height: 300px; }
+      .story-text h2 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Навигация -->
+  <nav class="navbar">
+    <img src="logo.png" alt="MA/ED Logo" class="logo-img" onerror="this.style.display='none'">
+    <div class="nav-links">
+      <a href="#">Обо мне</a>
+      <!-- Замените ссылку ниже на ваш реальный адрес палитры -->
+      <a href="index.html">Палитра</a> 
+      <a href="#">Портфолио</a>
+    </div>
+    <a href="https://vk.com/id184420359" class="cta-button" target="_blank">Рассчитать проект</a>
+  </nav>
+
+  <!-- Главный экран -->
+  <section class="hero">
+    <h1>ИНЖЕНЕРИЯ И ЭСТЕТИКА</h1>
+    <p>Проектирование в CAD, точный расчет нагрузок и авторский предметный дизайн. Мы объединяем 16 лет опыта в 3D с современными аддитивными технологиями.</p>
+  </section>
+
+  <!-- Сторителлинг в шахматном порядке -->
+  <section class="story-section">
+    
+    <!-- Блок 1: Пластилин (фото слева, текст справа) -->
+    <div class="story-block">
+      <div class="story-photo-wrapper">
+        <!-- Поместите сюда ваше фото из детства. Если его пока нет, будет пустой кремовый фон -->
+        <img src="photo_child.jpg" alt="Ребенок лепит из пластилина" class="story-photo" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='">
+      </div>
+      <div class="story-text">
+        <h2>Свобода формы</h2>
+        <p>Всё началось с обычного куска пластилина. В детстве меня завораживала возможность взять бесформенный кусок материала и придать ему любую форму, которую только могло нарисовать воображение.</p>
+        <p>Никаких ограничений, никаких правил — только чистая свобода созидания, где твои руки напрямую управляют геометрией пространства.</p>
+      </div>
+    </div>
+
+    <!-- Блок 2: Металлический конструктор (фото справа, текст слева) -->
+    <div class="story-block">
+      <div class="story-photo-wrapper">
+        <img src="photo_metal.jpg" alt="Металлический конструктор" class="story-photo" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='">
+      </div>
+      <div class="story-text">
+        <h2>Инженерная строгость</h2>
+        <p>Но свобода без дисциплины — это хаос. На смену пластилину пришел суровый советский металлический конструктор с его жесткими рамками, болтами и гайками.</p>
+        <p>Он научил меня мыслить системами. Здесь нужно было понимать, как работают механизмы, как распределяется нагрузка и почему конструкция держится. Так появилось уважение к чертежам и точности.</p>
+      </div>
+    </div>
+
+    <!-- Блок 3: LEGO (фото слева, текст справа) -->
+    <div class="story-block">
+      <div class="story-photo-wrapper">
+        <img src="photo_lego.jpg" alt="Конструктор LEGO" class="story-photo" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='">
+      </div>
+      <div class="story-text">
+        <h2>Идеальный синтез</h2>
+        <p>А потом появился конструктор LEGO, который объединил оба этих мира. Он давал инженерную прочность и точность сопряжения деталей, но при этом оставлял полную свободу для креатива и дизайна.</p>
+        <p>В нем математическая модульность встретилась с яркой эстетикой. Это стало фундаментом моего подхода к работе.</p>
+      </div>
+    </div>
+
+    <!-- Блок 4: 3D принтер (фото справа, текст слева) -->
+    <div class="story-block">
+      <div class="story-photo-wrapper">
+        <img src="photo_adult.jpg" alt="Артем Медведев у 3D принтера" class="story-photo" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='">
+      </div>
+      <div class="story-text">
+        <h2>3D-печать сегодня</h2>
+        <p>Спустя 16 лет в 3D-моделировании я нашел идеальный современный инструмент — 3D-принтер. Он позволяет мне проектировать сложные функциональные механизмы в CAD-программах и в тот же день держать их в руках.</p>
+        <p>Моя мастерская MA/ED — это место, где инженерный расчет встречается с красотой предметного дизайна.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+    © 2026 MA/ED | Artem Medvedev Studio
+  </footer>
+
+</body>
+</html>
